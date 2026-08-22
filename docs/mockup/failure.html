@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WordDeck — Validation Failed</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="app">
+      <div class="sidebar">
+        <div class="sidebar-brand">
+          <span class="logo">WD</span><span>WordDeck</span>
+        </div>
+        <nav class="side-nav">
+          <a href="dashboard.html"><span class="ico">⌂</span>Home</a>
+          <a href="review.html"><span class="ico">↻</span>Review</a>
+          <a href="progress.html"><span class="ico">▤</span>Progress</a>
+        </nav>
+        <div class="sidebar-foot">
+          <div class="mini-level">
+            <div class="head"><span>Lv 4</span><span>286 XP</span></div>
+            <div class="bar"><div style="width: 63%"></div></div>
+            <div class="lvl-name">Novice</div>
+          </div>
+          <div class="side-user">
+            <div class="avatar">A</div>
+            <div class="side-user-meta"><b>Andi</b><span>@andi</span></div>
+            <a href="login.html" class="side-logout">Logout</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="page">
+        <div class="topbar">
+          <div class="row">
+            <span class="brand">WordDeck</span>
+            <span class="top-title">Result</span>
+            <span class="spacer"></span>
+            <span class="pill streak">5-day streak</span>
+          </div>
+        </div>
+
+        <main>
+          <div class="banner failure mt-6">
+            <span class="icon">✗</span>
+            <div>
+              Not quite — the word <b>"journey"</b> wasn't found in your
+              sentence.
+              <div style="font-weight: 600; font-size: 13px; margin-top: 4px">
+                Try again, no penalty for retries.
+              </div>
+            </div>
+          </div>
+
+          <div class="card sentence-box">
+            <label for="sentence"
+              >Write a sentence using "<b>journey</b>"</label
+            >
+            <textarea
+              id="sentence"
+              rows="3"
+              placeholder="Include the word journey…"
+            >
+I went to the store.</textarea>
+            <p class="helper">
+              The word must appear in your sentence (min. 4 words). Punctuation
+              and capitals are ignored.
+            </p>
+            <button
+              class="btn btn-primary mt"
+              onclick="window.location = 'success.html'"
+            >
+              Check again
+            </button>
+          </div>
+
+          <div class="card">
+            <p class="muted"><b>Stuck?</b> Here's a hint to get you started:</p>
+            <p class="mt muted">
+              "My ________ to the mountains took three days."
+            </p>
+          </div>
+        </main>
+      </div>
+    </div>
+    <div class="mock-note">Mockup — <a href="index.html">back to hub</a></div>
+  </body>
+</html>

@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WordDeck — Dashboard</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="app">
+      <div class="sidebar">
+        <div class="sidebar-brand">
+          <span class="logo">WD</span><span>WordDeck</span>
+        </div>
+        <nav class="side-nav">
+          <a href="dashboard.html" class="active"
+            ><span class="ico">⌂</span>Home</a
+          >
+          <a href="review.html"><span class="ico">↻</span>Review</a>
+          <a href="progress.html"><span class="ico">▤</span>Progress</a>
+        </nav>
+        <div class="sidebar-foot">
+          <div class="mini-level">
+            <div class="head"><span>Lv 4</span><span>286 XP</span></div>
+            <div class="bar"><div style="width: 63%"></div></div>
+            <div class="lvl-name">Novice</div>
+          </div>
+          <div class="side-user">
+            <div class="avatar">A</div>
+            <div class="side-user-meta"><b>Andi</b><span>@andi</span></div>
+            <a href="login.html" class="side-logout">Logout</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="page">
+        <div class="topbar">
+          <div class="row">
+            <span class="brand">WordDeck</span>
+            <span class="top-title">Today</span>
+            <span class="spacer"></span>
+            <span class="pill streak">5-day streak</span>
+            <span class="pill user">Andi</span>
+          </div>
+          <div style="margin-top: 14px">
+            <div style="font-size: 13px; opacity: 0.7">Tuesday, July 31</div>
+            <div style="font-size: 20px; font-weight: 800; margin-top: 2px">
+              Your Word of the Day
+            </div>
+          </div>
+        </div>
+
+        <main>
+          <div class="layout dash">
+            <div class="dash-word">
+              <div
+                class="wordcard"
+                id="dashCard"
+                role="button"
+                aria-label="Open word of the day"
+                tabindex="0"
+              >
+                <div class="face front">
+                  <div class="part">Word of the Day</div>
+                  <div class="chips" style="margin-bottom: 14px">
+                    <span class="chip a1">A1</span>
+                    <span class="chip kind">n.</span>
+                  </div>
+                  <div class="word">journey</div>
+                  <div class="type">noun</div>
+                  <div class="hint">Tap to study ↻</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="dash-actions">
+              <div class="card">
+                <div class="actions-row">
+                  <button class="btn btn-primary" onclick="openModal()">
+                    + Add more words
+                  </button>
+                  <button
+                    class="btn btn-ghost"
+                    onclick="window.location = 'review.html'"
+                  >
+                    ↻ Review memorized words
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="dash-progress">
+              <div class="card">
+                <div class="row" style="align-items: baseline">
+                  <div style="font-weight: 800; font-size: 17px" class="grow">
+                    42 / 3306 memorized
+                  </div>
+                  <div
+                    style="font-size: 13px; font-weight: 700; color: #a3a3a3"
+                  >
+                    1.3%
+                  </div>
+                </div>
+                <div class="bar mt" style="margin-top: 10px">
+                  <div style="width: 1.3%"></div>
+                </div>
+                <p class="muted mt" style="margin-top: 8px">
+                  One word a day — you're building a habit.
+                </p>
+              </div>
+            </div>
+
+            <div class="dash-score">
+              <div class="stats">
+                <div class="stat">
+                  <div class="num">5</div>
+                  <div class="lab">Streak</div>
+                </div>
+                <div class="stat">
+                  <div class="num">Lv 4</div>
+                  <div class="lab">Novice</div>
+                </div>
+                <div class="stat">
+                  <div class="num">286 XP</div>
+                  <div class="lab">Total</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="span-full dash-activity">
+              <h2 class="section">Recent activity</h2>
+              <div class="card">
+                <div class="feed-item">
+                  <span class="feed-emoji">✓</span> Memorized
+                  <b>&nbsp;"journey"</b><span class="feed-meta">now</span>
+                </div>
+                <div class="feed-item">
+                  <span class="feed-emoji">↻</span> Reviewed
+                  <b>&nbsp;"abundant"</b><span class="feed-meta">2h</span>
+                </div>
+                <div class="feed-item">
+                  <span class="feed-emoji">✓</span> Memorized
+                  <b>&nbsp;"resilient"</b
+                  ><span class="feed-meta">yesterday</span>
+                </div>
+                <div class="feed-item">
+                  <span class="feed-emoji">★</span> Badge:
+                  <b>&nbsp;Week Warrior</b><span class="feed-meta">3d</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="nav">
+            <a href="dashboard.html" class="active"
+              ><span class="ico">⌂</span>Home</a
+            >
+            <a href="review.html"><span class="ico">↻</span>Review</a>
+            <a href="progress.html"><span class="ico">▤</span>Progress</a>
+            <a href="login.html"><span class="ico">→</span>Logout</a>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <!-- Word of the Day modal -->
+    <div class="modal-overlay" id="modal">
+      <div
+        class="modal"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Word of the Day"
+      >
+        <div class="modal-head">
+          <span class="modal-title">Word of the Day</span>
+          <button class="modal-close" onclick="closeModal()" aria-label="Close">
+            ×
+          </button>
+        </div>
+
+        <div class="stage">
+          <div
+            class="card-wrap"
+            id="modalCard"
+            role="button"
+            aria-label="Flip card"
+            tabindex="0"
+          >
+            <div class="face front">
+              <div class="part">Word of the Day</div>
+              <div class="word">journey</div>
+              <div class="type">noun</div>
+              <div class="tap-hint">Tap card to reveal</div>
+            </div>
+            <div class="face back">
+              <div class="back-top">
+                <span class="back-word">journey</span>
+                <span class="back-type">noun</span>
+              </div>
+              <div class="label">Definition</div>
+              <div class="definition">
+                An act of traveling from one place to another, especially when
+                it is long or difficult.
+              </div>
+              <div class="label">Translation</div>
+              <div class="translation">perjalanan</div>
+              <div class="label">Example</div>
+              <div class="example">
+                "They went on a long journey across the country by train."
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="prove">
+          <div class="prove-title">Prove you know it</div>
+          <div class="prove-sub">
+            Write a sentence using <b>"journey"</b> to lock this card in.
+          </div>
+          <textarea
+            id="sentence"
+            placeholder="Type your own sentence with the word journey…"
+          >
+My journey to school every morning takes about twenty minutes.</textarea>
+          <p class="helper">
+            The word must appear in your sentence (min. 4 words). Punctuation
+            and capitals are ignored.
+          </p>
+
+          <button class="btn btn-primary mt" onclick="checkSentence()">
+            Check my sentence
+          </button>
+
+          <div class="banner inline success" id="okBanner">
+            ✓ Correct — "journey" is now locked in. Nice work.
+          </div>
+          <div class="banner inline failure" id="noBanner">
+            ✗ Not quite.
+            <div class="reasons" id="noReasons"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mock-note">Mockup — <a href="index.html">back to hub</a></div>
+
+    <script>
+      var WORD = 'journey'
+      var modal = document.getElementById('modal')
+      var modalCard = document.getElementById('modalCard')
+
+      function openModal() {
+        modal.classList.add('open')
+        modalCard.classList.remove('flipped')
+        document.getElementById('okBanner').classList.remove('show')
+        document.getElementById('noBanner').classList.remove('show')
+        document.body.style.overflow = 'hidden'
+        setTimeout(function () {
+          modalCard.focus()
+        }, 300)
+      }
+      function closeModal() {
+        modal.classList.remove('open')
+        document.body.style.overflow = ''
+      }
+      modal.addEventListener('click', function (e) {
+        if (e.target === modal) closeModal()
+      })
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeModal()
+      })
+
+      function flipModal() {
+        modalCard.classList.toggle('flipped')
+      }
+      modalCard.addEventListener('click', flipModal)
+      modalCard.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault()
+          flipModal()
+        }
+      })
+
+      var dashCard = document.getElementById('dashCard')
+      dashCard.addEventListener('click', openModal)
+      dashCard.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault()
+          openModal()
+        }
+      })
+
+      function checkSentence() {
+        var text = document.getElementById('sentence').value.trim()
+        var ok = document.getElementById('okBanner')
+        var no = document.getElementById('noBanner')
+        var reasons = document.getElementById('noReasons')
+        var wordCount = text.split(/\s+/).filter(function (w) {
+          return w.length > 0
+        }).length
+        var hasWord = new RegExp('\\b' + WORD + '\\b', 'i').test(text)
+
+        if (!hasWord && wordCount < 4) {
+          reasons.textContent =
+            'The word "' +
+            WORD +
+            '" is missing and the sentence is too short (min. 4 words).'
+        } else if (!hasWord) {
+          reasons.textContent =
+            'Your sentence needs to include the word "' + WORD + '".'
+        } else if (wordCount < 4) {
+          reasons.textContent =
+            'That is only ' + wordCount + ' word(s) — write at least 4.'
+        }
+
+        if (hasWord && wordCount >= 4) {
+          no.classList.remove('show')
+          ok.classList.add('show')
+          setTimeout(closeModal, 1200)
+        } else {
+          ok.classList.remove('show')
+          no.classList.add('show')
+        }
+      }
+    </script>
+  </body>
+</html>

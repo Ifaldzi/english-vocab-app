@@ -1,0 +1,132 @@
+import {
+  createFileRoute,
+  Link,
+  redirect as routerRedirect,
+  useNavigate,
+  useRouter,
+} from '@tanstack/react-router'
+import { useState } from 'react'
+import type { FormEvent } from 'react'
+import { signupFn } from '../server/auth.functions'
+import { trackEvent } from '../lib/analytics'
+
+// Validate redirect target to prevent open redirect attacks.
+function sanitizeRedirect(url: unknown): string {
+  if (typeof url !== 'string' || !url.startsWith('/') || url.startsWith('//')) {
+    return '/'
+  }
+  return url
+}
+
+export const Route = createFileRoute('/signup')({
+  validateSearch: (search: Record<string, unknown>) => {
+    const redirect = sanitizeRedirect(search.redirect)
+    return redirect === '/' ? {} : { redirect }
+  },
+  beforeLoad: ({ context, search }) => {
+    if (context.user) {
+      throw routerRedirect({ to: search.redirect ?? '/' })
+    }
+  },
+  component: SignupPage,
+})
+
+function SignupPage() {
+  const router = useRouter()
+  const navigate = useNavigate()
+  const search = Route.useSearch()
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+  const [submitting, setSubmitting] = useState(false)
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setError('')
+    setSubmitting(true)
+    try {
+      const res = await signupFn({ data: { username, password } })
+      if ('error' in res) {
+        setError(res.error)
+        return
+      }
+      trackEvent('sign_up', { method: 'password' })
+      await router.invalidate()
+      navigate({ to: search.redirect })
+    } catch (err) {
+      console.error(err)
+      setError('Something went wrong. Please try again.')
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  return (
+    <div className="auth-wrap">
+      <div className="auth-card">
+        <div className="auth-logo">WD</div>
+        <h1>Create your account</h1>
+        <p className="sub">
+          Start building your vocabulary habit, one word a day.
+        </p>
+
+        <form onSubmit={handleSubmit}>
+          <div className="field">
+            <label htmlFor="username">Username</label>
+            <input
+              id="username"
+              type="text"
+              autoComplete="username"
+              placeholder="e.g. andi_love_english"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+              minLength={3}
+              maxLength={20}
+            />
+            <p className="helper">
+              3–20 characters: letters, numbers, underscores.
+            </p>
+          </div>
+
+          <div className="field">
+            <label htmlFor="password">Password</label>
+            <input
+              id="password"
+              type="password"
+              autoComplete="new-password"
+              placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              minLength={8}
+            />
+            <p className="helper">At least 8 characters.</p>
+          </div>
+
+          {error && (
+            <div
+              className="banner failure mb"
+              style={{ marginTop: 0, marginBottom: 12 }}
+            >
+              <span className="icon">!</span>
+              <div>{error}</div>
+            </div>
+          )}
+
+          <button
+            type="submit"
+            className="btn btn-primary mt-6"
+            disabled={submitting}
+          >
+            {submitting ? 'Creating account…' : 'Create account'}
+          </button>
+        </form>
+
+        <p className="auth-alt">
+          Already have an account? <Link to="/login">Log in</Link>
+        </p>
+      </div>
+    </div>
+  )
+}

@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WordDeck — Login</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="auth-wrap">
+      <div class="auth-card">
+        <div class="auth-logo">WD</div>
+        <h1>WordDeck</h1>
+        <p class="sub">
+          Gather &amp; memorize English vocabulary, one word a day.
+        </p>
+
+        <div class="field">
+          <label>Username</label>
+          <input
+            type="text"
+            placeholder="e.g. andi_love_english"
+            value="andi"
+          />
+        </div>
+        <div class="field">
+          <label>Password</label>
+          <input type="password" placeholder="••••••••" value="password" />
+        </div>
+        <button
+          class="btn btn-primary mt-6"
+          onclick="window.location = 'dashboard.html'"
+        >
+          Log in
+        </button>
+
+        <p class="auth-alt">Don't have an account? <a href="#">Sign up</a></p>
+      </div>
+    </div>
+    <div class="mock-note">Mockup — <a href="index.html">back to hub</a></div>
+  </body>
+</html>

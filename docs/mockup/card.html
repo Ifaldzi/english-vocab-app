@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WordDeck — Word Card</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="app">
+      <div class="sidebar">
+        <div class="sidebar-brand">
+          <span class="logo">WD</span><span>WordDeck</span>
+        </div>
+        <nav class="side-nav">
+          <a href="dashboard.html"><span class="ico">⌂</span>Home</a>
+          <a href="review.html"><span class="ico">↻</span>Review</a>
+          <a href="progress.html"><span class="ico">▤</span>Progress</a>
+        </nav>
+        <div class="sidebar-foot">
+          <div class="mini-level">
+            <div class="head"><span>Lv 4</span><span>286 XP</span></div>
+            <div class="bar"><div style="width: 63%"></div></div>
+            <div class="lvl-name">Novice</div>
+          </div>
+          <div class="side-user">
+            <div class="avatar">A</div>
+            <div class="side-user-meta"><b>Andi</b><span>@andi</span></div>
+            <a href="login.html" class="side-logout">Logout</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="page">
+        <div class="topbar">
+          <div class="row">
+            <span class="brand">WordDeck</span>
+            <span class="top-title">Word of the Day</span>
+            <span class="spacer"></span>
+            <span class="pill streak">5-day streak</span>
+          </div>
+          <div style="font-size: 13px; opacity: 0.7; margin-top: 10px">
+            <a href="dashboard.html" style="text-decoration: underline"
+              >← Back to today</a
+            >
+          </div>
+        </div>
+
+        <main>
+          <div class="layout two-col">
+            <div>
+              <div class="stage">
+                <div
+                  class="card-wrap"
+                  id="card"
+                  role="button"
+                  aria-label="Flip card"
+                  tabindex="0"
+                >
+                  <div class="face front">
+                    <div class="part">Word of the Day</div>
+                    <div class="word">journey</div>
+                    <div class="type">noun</div>
+                    <div class="tap-hint">Tap card to reveal</div>
+                  </div>
+
+                  <div class="face back">
+                    <div class="back-top">
+                      <span class="back-word">journey</span>
+                      <span class="back-type">noun</span>
+                    </div>
+
+                    <div class="label">Definition</div>
+                    <div class="definition">
+                      An act of traveling from one place to another, especially
+                      when it is long or difficult.
+                    </div>
+
+                    <div class="label">Translation</div>
+                    <div class="translation">perjalanan</div>
+
+                    <div class="label">Example</div>
+                    <div class="example">
+                      "They went on a long journey across the country by train."
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <div class="prove">
+                <div class="prove-title">Prove you know it</div>
+                <div class="prove-sub">
+                  Write a sentence using <b>"journey"</b> to lock this card in.
+                </div>
+                <textarea
+                  id="sentence"
+                  placeholder="Type your own sentence with the word journey…"
+                >
+My journey to school every morning takes about twenty minutes.</textarea>
+                <p class="helper">
+                  The word must appear in your sentence (min. 4 words).
+                  Punctuation and capitals are ignored.
+                </p>
+
+                <button class="btn btn-primary mt" onclick="checkSentence()">
+                  Check my sentence
+                </button>
+
+                <div class="banner inline success" id="okBanner">
+                  ✓ Correct — "journey" is now locked in. Nice work.
+                </div>
+                <div class="banner inline failure" id="noBanner">
+                  ✗ Not quite.
+                  <div class="reasons" id="noReasons"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="nav">
+            <a href="dashboard.html"><span class="ico">⌂</span>Home</a>
+            <a href="review.html"><span class="ico">↻</span>Review</a>
+            <a href="progress.html"><span class="ico">▤</span>Progress</a>
+            <a href="login.html"><span class="ico">→</span>Logout</a>
+          </div>
+        </main>
+      </div>
+    </div>
+    <div class="mock-note">Mockup — <a href="index.html">back to hub</a></div>
+
+    <script>
+      var card = document.getElementById('card')
+      var WORD = 'journey'
+      function flip() {
+        card.classList.toggle('flipped')
+      }
+      card.addEventListener('click', flip)
+      card.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault()
+          flip()
+        }
+      })
+
+      function checkSentence() {
+        var text = document.getElementById('sentence').value.trim()
+        var ok = document.getElementById('okBanner')
+        var no = document.getElementById('noBanner')
+        var reasons = document.getElementById('noReasons')
+        var wordCount = text.split(/\s+/).filter(function (w) {
+          return w.length > 0
+        }).length
+        var hasWord = new RegExp('\\b' + WORD + '\\b', 'i').test(text)
+
+        if (!hasWord && wordCount < 4) {
+          reasons.textContent =
+            'The word "' +
+            WORD +
+            '" is missing and the sentence is too short (min. 4 words).'
+        } else if (!hasWord) {
+          reasons.textContent =
+            'Your sentence needs to include the word "' + WORD + '".'
+        } else if (wordCount < 4) {
+          reasons.textContent =
+            'That is only ' + wordCount + ' word(s) — write at least 4.'
+        }
+
+        if (hasWord && wordCount >= 4) {
+          no.classList.remove('show')
+          ok.classList.add('show')
+          setTimeout(function () {
+            window.location = 'success.html'
+          }, 900)
+        } else {
+          ok.classList.remove('show')
+          no.classList.add('show')
+        }
+      }
+    </script>
+  </body>
+</html>

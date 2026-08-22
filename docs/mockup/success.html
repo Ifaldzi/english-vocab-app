@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WordDeck — Success</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="app">
+      <div class="sidebar">
+        <div class="sidebar-brand">
+          <span class="logo">WD</span><span>WordDeck</span>
+        </div>
+        <nav class="side-nav">
+          <a href="dashboard.html"><span class="ico">⌂</span>Home</a>
+          <a href="review.html"><span class="ico">↻</span>Review</a>
+          <a href="progress.html"><span class="ico">▤</span>Progress</a>
+        </nav>
+        <div class="sidebar-foot">
+          <div class="mini-level">
+            <div class="head"><span>Lv 4</span><span>286 XP</span></div>
+            <div class="bar"><div style="width: 63%"></div></div>
+            <div class="lvl-name">Novice</div>
+          </div>
+          <div class="side-user">
+            <div class="avatar">A</div>
+            <div class="side-user-meta"><b>Andi</b><span>@andi</span></div>
+            <a href="login.html" class="side-logout">Logout</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="page">
+        <div class="topbar">
+          <div class="row">
+            <span class="brand">WordDeck</span>
+            <span class="top-title">Result</span>
+            <span class="spacer"></span>
+            <span class="pill streak">5-day streak</span>
+          </div>
+        </div>
+
+        <main>
+          <div class="banner success mt-6">
+            <span class="icon">✓</span>
+            <div>
+              Great sentence! <b>"journey"</b> is memorized.
+              <div style="font-weight: 600; font-size: 13px; margin-top: 4px">
+                +20 XP (daily word) · streak → 6
+              </div>
+            </div>
+          </div>
+
+          <div class="card center">
+            <div
+              class="level-badge"
+              style="
+                margin: 0 auto 10px;
+                width: 56px;
+                height: 56px;
+                font-size: 26px;
+              "
+            >
+              ★
+            </div>
+            <div style="font-weight: 800; font-size: 20px; margin: 6px 0">
+              Nice one, Andi!
+            </div>
+            <p class="muted">
+              You used the word correctly. Keep it in your long-term memory by
+              reviewing it later.
+            </p>
+            <div class="stats" style="grid-template-columns: 1fr 1fr">
+              <div class="stat">
+                <div class="num">43</div>
+                <div class="lab">Memorized</div>
+              </div>
+              <div class="stat">
+                <div class="num">306 XP</div>
+                <div class="lab">Level 4 → 5</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="row">
+              <button
+                class="btn btn-primary"
+                onclick="window.location = 'card.html'"
+              >
+                + Another word
+              </button>
+            </div>
+            <button
+              class="btn btn-ghost mt"
+              onclick="window.location = 'dashboard.html'"
+            >
+              Back to today
+            </button>
+            <button
+              class="btn btn-ghost mt"
+              onclick="window.location = 'review.html'"
+            >
+              ↻ Review practice
+            </button>
+          </div>
+        </main>
+      </div>
+    </div>
+    <div class="mock-note">Mockup — <a href="index.html">back to hub</a></div>
+  </body>
+</html>

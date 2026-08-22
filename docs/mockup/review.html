@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WordDeck — Review</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="app">
+      <div class="sidebar">
+        <div class="sidebar-brand">
+          <span class="logo">WD</span><span>WordDeck</span>
+        </div>
+        <nav class="side-nav">
+          <a href="dashboard.html"><span class="ico">⌂</span>Home</a>
+          <a href="review.html" class="active"
+            ><span class="ico">↻</span>Review</a
+          >
+          <a href="progress.html"><span class="ico">▤</span>Progress</a>
+        </nav>
+        <div class="sidebar-foot">
+          <div class="mini-level">
+            <div class="head"><span>Lv 4</span><span>286 XP</span></div>
+            <div class="bar"><div style="width: 63%"></div></div>
+            <div class="lvl-name">Novice</div>
+          </div>
+          <div class="side-user">
+            <div class="avatar">A</div>
+            <div class="side-user-meta"><b>Andi</b><span>@andi</span></div>
+            <a href="login.html" class="side-logout">Logout</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="page">
+        <div class="topbar">
+          <div class="row">
+            <span class="brand">WordDeck</span>
+            <span class="top-title">Review</span>
+            <span class="spacer"></span>
+            <span class="pill">4 words to review</span>
+          </div>
+        </div>
+
+        <main>
+          <div class="card" id="quiz">
+            <p class="muted" id="progressLabel">
+              Review 1 of 4 · words memorized longest ago first
+            </p>
+            <div style="margin-top: 18px">
+              <div class="chips">
+                <span class="chip b2" id="lvlChip">B2</span>
+                <span class="chip kind" id="kindChip">adj.</span>
+              </div>
+              <div
+                class="word"
+                style="font-size: 48px; font-weight: 800; margin-top: 12px"
+                id="qWord"
+              >
+                abundant
+              </div>
+            </div>
+
+            <div class="sentence-box" style="margin-top: 8px">
+              <label id="qPrompt"
+                >Which is the correct definition of "<b>abundant</b>"?</label
+              >
+              <div class="mcq" id="mcq"></div>
+
+              <div class="banner inline success" id="okBanner">
+                <span class="icon">✓</span>
+                <div>
+                  Correct! <b>+5 XP</b
+                  ><span class="reasons"
+                    >"abundant" review count incremented.</span
+                  >
+                </div>
+              </div>
+              <div class="banner inline failure" id="noBanner">
+                <span class="icon">✗</span>
+                <div>
+                  Not quite.<span class="reasons" id="noReasons"
+                    >The correct answer was highlighted above. No XP
+                    earned.</span
+                  >
+                </div>
+              </div>
+
+              <button
+                class="btn btn-primary mt"
+                id="nextBtn"
+                style="display: none"
+              >
+                Next word
+              </button>
+            </div>
+          </div>
+
+          <div class="nav">
+            <a href="dashboard.html"><span class="ico">⌂</span>Home</a>
+            <a href="review.html" class="active"
+              ><span class="ico">↻</span>Review</a
+            >
+            <a href="progress.html"><span class="ico">▤</span>Progress</a>
+            <a href="login.html"><span class="ico">→</span>Logout</a>
+          </div>
+        </main>
+      </div>
+    </div>
+    <div class="mock-note">Mockup — <a href="index.html">back to hub</a></div>
+
+    <script>
+      var QS = [
+        {
+          word: 'abundant',
+          level: 'B2',
+          kind: 'adj.',
+          correct: 'Existing or available in large quantities; plentiful.',
+          opts: [
+            'Existing or available in large quantities; plentiful.',
+            'To take or carry something from one place to another.',
+            'Feeling or showing anger and annoyance.',
+            'Small in size, amount, or degree.',
+          ],
+        },
+        {
+          word: 'meticulous',
+          level: 'B2',
+          kind: 'adj.',
+          correct:
+            'Showing great attention to detail; very careful and precise.',
+          opts: [
+            'Showing great attention to detail; very careful and precise.',
+            'Happening or done without delay; immediate.',
+            'Unwilling to spend money; miserly.',
+            'Lasting for a very short time.',
+          ],
+        },
+        {
+          word: 'feasible',
+          level: 'B2',
+          kind: 'adj.',
+          correct: 'Possible to do easily or conveniently; practical.',
+          opts: [
+            'Possible to do easily or conveniently; practical.',
+            'Having great power or influence over others.',
+            'Extremely surprising and impressive.',
+            'Likely to change often and suddenly.',
+          ],
+        },
+        {
+          word: 'genuine',
+          level: 'B1',
+          kind: 'adj.',
+          correct: 'Real and exactly what it appears to be; not fake.',
+          opts: [
+            'Real and exactly what it appears to be; not fake.',
+            'Relating to money or the way money is used.',
+            'Full of energy and enthusiasm.',
+            'Happening by chance rather than by plan.',
+          ],
+        },
+      ]
+
+      var idx = 0
+      var qWord = document.getElementById('qWord')
+      var lvlChip = document.getElementById('lvlChip')
+      var kindChip = document.getElementById('kindChip')
+      var qPrompt = document.getElementById('qPrompt')
+      var mcq = document.getElementById('mcq')
+      var okBanner = document.getElementById('okBanner')
+      var noBanner = document.getElementById('noBanner')
+      var nextBtn = document.getElementById('nextBtn')
+      var progressLabel = document.getElementById('progressLabel')
+
+      function shuffle(arr) {
+        for (var i = arr.length - 1; i > 0; i--) {
+          var j = Math.floor(Math.random() * (i + 1))
+          var t = arr[i]
+          arr[i] = arr[j]
+          arr[j] = t
+        }
+        return arr
+      }
+
+      function render() {
+        var q = QS[idx]
+        qWord.textContent = q.word
+        lvlChip.textContent = q.level
+        lvlChip.className = 'chip ' + q.level.toLowerCase()
+        kindChip.textContent = q.kind
+        qPrompt.innerHTML =
+          'Which is the correct definition of "<b>' + q.word + '</b>"?'
+        progressLabel.textContent =
+          'Review ' +
+          (idx + 1) +
+          ' of ' +
+          QS.length +
+          ' · words memorized longest ago first'
+        okBanner.classList.remove('show')
+        noBanner.classList.remove('show')
+        nextBtn.style.display = 'none'
+        mcq.innerHTML = ''
+
+        var opts = shuffle(q.opts.slice())
+        opts.forEach(function (opt) {
+          var b = document.createElement('button')
+          b.className = 'btn opt'
+          b.type = 'button'
+          b.textContent = opt
+          b.addEventListener('click', function () {
+            answer(opt, q, b)
+          })
+          mcq.appendChild(b)
+        })
+      }
+
+      function answer(selected, q, btn) {
+        var opts = mcq.querySelectorAll('.opt')
+        opts.forEach(function (o) {
+          o.disabled = true
+          if (o.textContent === q.correct) o.classList.add('correct')
+          if (o === btn && selected !== q.correct) o.classList.add('wrong')
+        })
+        if (selected === q.correct) {
+          okBanner.classList.add('show')
+        } else {
+          noBanner.classList.add('show')
+        }
+        nextBtn.style.display = 'inline-flex'
+        nextBtn.textContent =
+          idx === QS.length - 1 ? 'Finish review' : 'Next word'
+      }
+
+      nextBtn.addEventListener('click', function () {
+        if (idx === QS.length - 1) {
+          window.location = 'progress.html'
+          return
+        }
+        idx++
+        render()
+      })
+
+      render()
+    </script>
+  </body>
+</html>
