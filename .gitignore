@@ -11,7 +11,9 @@ dist-ssr
 .vinxi
 __unconfig*
 todos.json
-data/worddeck.db
+data/*.db
 data/worddeck.db-journal
 data/worddeck.db-wal
 data/worddeck.db-shm
+
+.vscode
