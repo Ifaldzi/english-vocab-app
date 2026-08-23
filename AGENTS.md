@@ -50,7 +50,7 @@ npx drizzle-kit studio # Open Drizzle Studio
 ## Conventions
 
 - **Commit Messages**: Always use [Conventional Commits](https://www.conventionalcommits.org/) format: `type(scope): subject` (e.g., `feat(auth): add login flow`, `fix(review): correct score calculation`). Types: `feat`, `fix`, `refactor`, `chore`, `docs`, `test`, `style`, `perf`.
-- **Commit & Push After Each Feature**: After finishing a feature implementation, commit the changes and push them to the remote branch.
+- **Commit & Push After Every Change**: After finishing any work — feature implementation, bug fixes, or refactoring — commit the changes and push them to the remote branch.
 
 <!-- intent-skills:start -->
 
