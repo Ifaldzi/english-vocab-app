@@ -209,7 +209,7 @@ function TodayPage() {
       <StudyModal
         study={study}
         onClose={() => setStudy((s) => ({ ...s, open: false }))}
-        onBackToToday={() => navigate({ to: '/' })}
+        onBackToToday={() => setStudy((s) => ({ ...s, open: false }))}
         onSaved={() => {
           queryClient.invalidateQueries({ queryKey: ['daily-word'] })
           queryClient.invalidateQueries({ queryKey: ['progress'] })
