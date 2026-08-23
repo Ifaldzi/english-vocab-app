@@ -3,7 +3,7 @@ import { and, eq } from 'drizzle-orm'
 import { db } from '../db/index'
 import { dailyWords, userWords, words } from '../db/schema'
 import { displayWord } from '../lib/word'
-import { validateSentence } from './validate'
+import { validateSentence } from './sentence-validator.server'
 import {
   awardXp,
   bumpStreak,
@@ -19,9 +19,11 @@ import {
  * marks the word memorized, awards XP, updates the streak and badges.
  */
 export type StudyResult =
-  | { pass: false; reason?: string }
+  | { pass: false; reason?: string; correction?: string }
   | {
       pass: true
+      reason?: string
+      correction?: string
       xpEarned: number
       totalXp: number
       level: number
@@ -42,9 +44,19 @@ export async function studyValidateSentence(input: {
   const word = await db.select().from(words).where(eq(words.id, wordId)).get()
   if (!word) return { pass: false, reason: 'Word not found.' }
 
-  const result = validateSentence(word.word, sentence)
+  const result = await validateSentence({
+    word: word.word,
+    sentence,
+    definition: word.definition,
+    level: word.level,
+    kind: word.kind,
+  })
   if (!result.pass) {
-    return { pass: false, reason: result.reason }
+    return {
+      pass: false,
+      reason: result.reason,
+      correction: result.correction,
+    }
   }
 
   const date = todayKey()
@@ -110,6 +122,8 @@ export async function studyValidateSentence(input: {
 
   return {
     pass: true,
+    reason: result.reason,
+    correction: result.correction,
     xpEarned,
     totalXp: stats.xp,
     level: stats.level,

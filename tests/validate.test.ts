@@ -6,6 +6,7 @@ import {
   wordVariants,
   stripHomographSuffix,
 } from '../src/server/validate'
+import { createSentenceValidator } from '../src/server/sentence-validator.server'
 
 describe('stripHomographSuffix', () => {
   it('strips trailing digits', () => {
@@ -67,5 +68,88 @@ describe('keywordValidator', () => {
   it('fails on an empty sentence', () => {
     const res = keywordValidator('run', '   ')
     assert.equal(res.pass, false)
+  })
+})
+
+describe('sentence validator selection', () => {
+  const input = {
+    word: 'journey',
+    definition: 'an act of travelling from one place to another',
+    sentence: 'My journey to school is long.',
+  }
+
+  it('uses the AI adapter and returns a correction', async () => {
+    let prompt = ''
+    const validator = createSentenceValidator({
+      mode: 'ai',
+      geminiApiKey: 'test-key',
+      generateGeminiContent: async (value) => {
+        prompt = value
+        return JSON.stringify({
+          pass: true,
+          reason: 'The word is used in the correct meaning.',
+          correction: 'My journey to school is long.',
+        })
+      },
+    })
+
+    const result = await validator(input)
+
+    assert.equal(result.pass, true)
+    assert.equal(result.correction, 'My journey to school is long.')
+    assert.match(prompt, /journey/)
+    assert.match(prompt, /My journey to school is long\./)
+  })
+
+  it('falls back to keyword validation for malformed AI output', async () => {
+    const validator = createSentenceValidator({
+      mode: 'ai',
+      geminiApiKey: 'test-key',
+      generateGeminiContent: async () => '{not-json',
+    })
+
+    const result = await validator(input)
+
+    assert.equal(result.pass, true)
+    assert.equal(result.correction, undefined)
+  })
+
+  it('falls back to keyword validation when the AI request fails', async () => {
+    const validator = createSentenceValidator({
+      mode: 'ai',
+      geminiApiKey: 'test-key',
+      generateGeminiContent: async () => {
+        throw new Error('provider unavailable')
+      },
+    })
+
+    const result = await validator(input)
+
+    assert.equal(result.pass, true)
+  })
+
+  it('uses keyword validation when AI is not configured', async () => {
+    const validator = createSentenceValidator({ mode: 'ai' })
+
+    const result = await validator(input)
+
+    assert.equal(result.pass, true)
+  })
+
+  it('allows explicitly selecting keyword validation', async () => {
+    let called = false
+    const validator = createSentenceValidator({
+      mode: 'keyword',
+      geminiApiKey: 'test-key',
+      generateGeminiContent: async () => {
+        called = true
+        return JSON.stringify({ pass: false })
+      },
+    })
+
+    const result = await validator(input)
+
+    assert.equal(result.pass, true)
+    assert.equal(called, false)
   })
 })

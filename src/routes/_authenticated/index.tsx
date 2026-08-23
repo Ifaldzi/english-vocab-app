@@ -241,11 +241,13 @@ function StudyModal({
   const [feedback, setFeedback] = useState<null | {
     pass: boolean
     reason?: string
+    correction?: string
   }>(null)
   const [saved, setSaved] = useState<null | {
     xpEarned: number
     streak: number
     isDaily: boolean
+    correction?: string
   }>(null)
 
   useEffect(() => {
@@ -279,7 +281,7 @@ function StudyModal({
         data: { wordId: word.id, sentence, kind: study.kind },
       })
       if (!res.pass) {
-        setFeedback({ pass: false, reason: res.reason })
+        setFeedback(res)
         return
       }
       trackEvent('word_memorized', {
@@ -287,11 +289,12 @@ function StudyModal({
         kind: study.kind,
         xp: res.xpEarned,
       })
-      setFeedback({ pass: true })
+      setFeedback(res)
       setSaved({
         xpEarned: res.xpEarned,
         streak: res.streak,
         isDaily: res.isDaily,
+        correction: res.correction,
       })
       onSaved()
     } finally {
@@ -408,8 +411,8 @@ function StudyModal({
                 placeholder={`Type your own sentence with the word ${displayWord(word.word)}…`}
               />
               <p className="helper">
-                The word must appear in your sentence (min. 4 words).
-                Punctuation and capitals are ignored.
+                Use the word naturally in a sentence of at least 4 words. AI
+                checks the meaning and may suggest a grammar improvement.
               </p>
 
               <button
@@ -434,6 +437,11 @@ function StudyModal({
                         {saved.isDaily ? ' (daily word)' : ''}
                         {saved.streak > 1 ? ` · streak → ${saved.streak}` : ''}
                       </div>
+                      {saved.correction && (
+                        <div className="reason">
+                          Suggested correction: “{saved.correction}”
+                        </div>
+                      )}
                     </div>
                   </div>
                   <div className="actions-row mt">
@@ -452,7 +460,12 @@ function StudyModal({
                   </span>
                   <div>
                     ✗ Not quite.
-                    <div className="reason">{feedback.reason}</div>
+                    {feedback.reason && (
+                      <div className="reason">{feedback.reason}</div>
+                    )}
+                    {feedback.correction && (
+                      <div className="reason">Try: “{feedback.correction}”</div>
+                    )}
                   </div>
                 </div>
               ) : null}

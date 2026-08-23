@@ -5,7 +5,7 @@ import { db } from '../db/index'
 import { words } from '../db/schema'
 import { authMiddleware } from './auth-middleware'
 import { getDailyWordForUser, getExtraWordForUser } from './words'
-import { validateSentence } from './validate'
+import { validateSentence } from './sentence-validator.server'
 import { todayKey } from './gamification'
 import type { Word } from '../lib/types'
 
@@ -56,6 +56,12 @@ export const validateSentenceFn = createServerFn({ method: 'POST' })
       .get()
     if (!word) throw new Error('Word not found')
 
-    const result = validateSentence(word.word, data.sentence)
+    const result = await validateSentence({
+      word: word.word,
+      sentence: data.sentence,
+      definition: word.definition,
+      level: word.level,
+      kind: word.kind,
+    })
     return { ...result, wordId: data.wordId }
   })

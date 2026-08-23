@@ -1,7 +1,6 @@
 # WordDeck — Full Implementation Plan
 
-Status: **In progress** — M3-7, M4-2, M7-4/5, M8-1…M8-7 done in this
-session; all plan milestones complete.
+Status: **In progress** — M1-M9 complete; all planned milestones are implemented.
 Reference: `docs/PRD.md` (functional requirements) and `docs/mockup/` (UI reference).
 
 ---
@@ -138,6 +137,30 @@ Reference: `docs/PRD.md` (functional requirements) and `docs/mockup/` (UI refere
 
 ---
 
+## Milestone 9 — AI Sentence Validation (FR-4)
+
+- [x] M9-1 Define an async, vendor-neutral sentence-validation contract with
+      structured `{ pass, reason?, correction? }` results; keep keyword matching
+      as an independent deterministic adapter.
+- [x] M9-2 Implement the Gemini adapter behind the AI boundary. Send only the
+      target word, definition/metadata, and learner sentence; require structured
+      output; validate and sanitize the response; apply a bounded request timeout.
+- [x] M9-3 Add `SENTENCE_VALIDATOR=ai|keyword` configuration. The `ai` mode maps
+      internally to Gemini for now; `GEMINI_API_KEY` and optional model settings
+      remain server-only. Missing configuration, timeouts, provider failures, and
+      malformed responses fall back to keyword validation.
+- [x] M9-4 Update both sentence-validation call paths to await the async validator
+      without changing the study/reward transaction semantics.
+- [x] M9-5 Show optional grammar corrections and a concise AI-processing disclosure
+      in the sentence form while preserving the existing retry/loading behavior.
+- [x] M9-6 Add tests for meaning-first AI results, correction handling, malformed
+      provider output, timeout/error fallback, configuration selection, and the
+      unchanged keyword validator behavior.
+- [x] M9-7 Document environment variables and privacy behavior; run tests, lint,
+      typecheck, and production build.
+
+---
+
 ## Suggested Execution Order
 
 1. M4-2 (unlimited extra words) — quick, unlocks a PRD requirement.
@@ -146,3 +169,4 @@ Reference: `docs/PRD.md` (functional requirements) and `docs/mockup/` (UI refere
 4. M8-1/M8-2 (responsive + edge states).
 5. M8-5/M8-6 (tests + fix integration-test).
 6. M8-7 (final verification: lint, typecheck, build, smoke test).
+7. M9-1…M9-7 (AI sentence validation).

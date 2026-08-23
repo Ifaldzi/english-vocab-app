@@ -1,8 +1,8 @@
 # PRD — English Vocabulary Memorizer (working title: "WordDeck")
 
-**Status:** Draft for review
+**Status:** Draft for AI validation review
 **Author:** brainstormed with product owner
-**Date:** 2026-07-31
+**Date:** 2026-08-23
 
 ---
 
@@ -32,8 +32,9 @@ functional requirements in this document take precedence.
   surfacing an already-memorized word (spaced recall).
 - Flip-card word UI showing: word, level, part of speech, English definition,
   Indonesian translation, and example sentence.
-- Sentence validation via **keyword matching** (word present + minimum length),
-  designed so the validator can later be swapped for an LLM.
+- Sentence validation via a **vendor-agnostic AI validator** (Gemini initially)
+  that checks meaning and word usage, with deterministic keyword matching as a
+  fallback.
 - Unlimited extra words per day ("Add more words").
 - Review mode for previously memorized words.
 - Gamification: XP, levels, daily streak, badges/achievements.
@@ -44,7 +45,6 @@ functional requirements in this document take precedence.
 
 ### Non-Goals (v1)
 
-- LLM-based sentence validation (future; see Roadmap).
 - Spaced-repetition scheduling engine (future; see Roadmap).
 - Social features, leaderboards, public profiles.
 - Admin panel, word moderation workflows.
@@ -67,8 +67,9 @@ scaffold but practices by composing English sentences.
 2. As a user, when I open the app I see my Word of the Day for today.
 3. As a user, I can flip the card to see the definition, Indonesian translation,
    and example sentence.
-4. As a user, I can write a sentence using the word; the app validates it and gives
-   me pass/fail feedback (with retry on failure).
+4. As a user, I can write a sentence using the word; the app validates its meaning
+   and usage, gives me pass/fail feedback, and optionally suggests a grammar
+   correction (with retry on failure).
 5. As a user, when I pass, the card is closed as "memorized" and I earn XP.
 6. As a user, I can add more words any time during the day, unlimited.
 7. As a user, I can enter review mode to re-practice already-memorized words via
@@ -122,20 +123,37 @@ scaffold but practices by composing English sentences.
 - **FR-3.4** No phonetic transcription is displayed in v1 (the `words` table has no
   phonetic field; pronunciation is a post-v1 roadmap item).
 
-### FR-4 Sentence Validation (keyword matching)
+### FR-4 Sentence Validation (AI with keyword fallback)
 
 - **FR-4.1** Validation endpoint receives the word and the user's sentence.
-- **FR-4.2** Rules:
+- **FR-4.2** The deterministic keyword validator rules are:
   - Normalize: lowercase; strip punctuation into spaces; collapse whitespace.
   - **Word presence:** the word (or any of its comma-separated variants, e.g.
     `"a, an"` → `a` **or** `an`) must appear as a token in the sentence. Trailing
     homograph digits are stripped for matching (`can1` → matches `can`).
   - **Minimum length:** sentence must contain at least 4 tokens.
-- **FR-4.3** On pass: word marked memorized, XP awarded, daily word closed.
-- **FR-4.4** On fail: user sees feedback and can retry as many times as they want.
-- **FR-4.5** Architecture: validator is a pluggable function
-  `validateSentence(word, sentence) → { pass, reason }` so an LLM implementation can
-  replace keyword matching later without touching the rest of the flow.
+- **FR-4.3** The AI validator receives the target word, its English definition,
+  relevant word metadata, and the user's sentence. It passes when the sentence
+  demonstrates the target word's intended meaning. Natural inflections are
+  accepted when they clearly represent the target word. Minor grammar or spelling
+  errors do not fail an otherwise understandable sentence.
+- **FR-4.4** The AI validator returns structured data containing `pass`, a concise
+  learner-facing `reason` when useful, and an optional `correction` containing a
+  corrected version of the sentence when grammar or spelling can be improved.
+  Provider prose and unvalidated fields must never be sent directly to the UI.
+- **FR-4.5** The active validator is selected by the vendor-neutral
+  `SENTENCE_VALIDATOR` setting: `ai` uses the configured AI adapter and `keyword`
+  uses deterministic keyword matching. The initial `ai` adapter is Gemini, but
+  changing vendors must not require changes to the study flow or UI.
+- **FR-4.6** If the AI adapter is not configured, times out, fails, or returns an
+  invalid response, validation falls back to keyword matching. The user is not
+  blocked by an external provider outage, and provider error details are not
+  exposed in the UI.
+- **FR-4.7** On pass: word marked memorized, XP awarded, daily word closed.
+- **FR-4.8** On fail: user sees feedback and can retry as many times as they want.
+- **FR-4.9** The sentence form briefly discloses that AI may process the sentence
+  for meaning and usage checking. AI prompts, responses, and sentence content are
+  not persisted or written to logs.
 
 ### FR-5 Extra Words
 
@@ -264,10 +282,15 @@ Indexes: `user_words(user_id)`, `daily_words(user_id, date)`,
   indexed and must return < 100 ms.
 - **Security** — bcrypt password hashing; `HttpOnly`/`SameSite` session cookies;
   server-side authorization on all mutations (never trust the client for XP);
-  unique constraint on `users.username_key` (case-insensitive).
-- **Availability** — runs as a single Node process; SQLite file DB (no external
-  server-side services). Google Analytics is the only client-side third-party
-  dependency and is non-blocking (app works fully if it fails to load).
+  unique constraint on `users.username_key` (case-insensitive); AI API keys are
+  server-only environment variables and are never exposed to the client bundle.
+- **Availability** — runs as a single Node process; SQLite file DB. AI validation
+  is an optional external server-side dependency and keyword fallback keeps the
+  learning flow available if it fails. Google Analytics remains non-blocking.
+- **Privacy** — when AI validation is enabled, the user's sentence and required
+  word context are sent to the configured AI provider for one validation request.
+  Prompts and responses are not stored or logged, and the UI discloses this
+  processing.
 - **Maintainability** — typed end-to-end (TypeScript, Zod schemas), DB migrations
   via Drizzle, seed script idempotent.
 - **Design: no emoji icons** — icons must use a real icon set (e.g. Lucide /
@@ -279,17 +302,18 @@ Indexes: `user_words(user_id)`, `daily_words(user_id, date)`,
 
 ## 8. Tech Stack
 
-| Concern      | Choice                                              |
-| ------------ | --------------------------------------------------- |
-| Framework    | TanStack Start (full-stack, Vite + Nitro)           |
-| Routing      | TanStack Router                                     |
-| Server state | TanStack Query                                      |
-| UI           | React + TypeScript + Tailwind CSS                   |
-| DB           | SQLite via better-sqlite3 + Drizzle ORM             |
-| Validation   | Zod                                                 |
-| Auth         | Custom: bcrypt + signed session cookies             |
-| Analytics    | Google Analytics 4 via gtag.js (env-gated)          |
-| Seed data    | `data/oxford_3000.json` → `words` table (3306 rows) |
+| Concern       | Choice                                              |
+| ------------- | --------------------------------------------------- |
+| Framework     | TanStack Start (full-stack, Vite + Nitro)           |
+| Routing       | TanStack Router                                     |
+| Server state  | TanStack Query                                      |
+| UI            | React + TypeScript + Tailwind CSS                   |
+| DB            | SQLite via better-sqlite3 + Drizzle ORM             |
+| Validation    | Zod                                                 |
+| Auth          | Custom: bcrypt + signed session cookies             |
+| Analytics     | Google Analytics 4 via gtag.js (env-gated)          |
+| AI validation | Vendor-neutral adapter; Gemini initially            |
+| Seed data     | `data/oxford_3000.json` → `words` table (3306 rows) |
 
 ---
 
@@ -306,13 +330,18 @@ Indexes: `user_words(user_id)`, `daily_words(user_id, date)`,
 6. **Badges + progress dashboard**.
 7. **Polish** — responsive pass, empty/edge states, tests. UI must match the
    `docs/mockup/` mockups.
+8. **AI sentence validation** — vendor-neutral async validator, Gemini adapter,
+   structured meaning/grammar feedback, keyword fallback, privacy disclosure,
+   configuration, and provider-mocked tests.
 
 ---
 
 ## 10. Roadmap (post-v1)
 
-- Swap keyword validator for an LLM validator (pluggable interface already in place),
-  with keyword matching as fallback.
+- Add additional AI providers behind the existing adapter without changing the
+  study flow.
+- Add AI validation rate limiting, cost controls, and an evaluation set for
+  learner sentences.
 - Spaced-repetition scheduling (SM-2) for review mode.
 - CEFR-level filter and per-level daily word targets.
 - Pronunciation audio (free TTS API).

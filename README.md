@@ -14,15 +14,15 @@ A full-stack web app that helps you gather and memorize English vocabulary using
 
 ## Tech Stack
 
-| Concern      | Choice                                  |
-| ------------ | --------------------------------------- |
-| Framework    | TanStack Start (Vite + Nitro)           |
-| Routing      | TanStack Router (file-based)            |
-| UI           | React + TypeScript + Tailwind CSS       |
-| DB           | SQLite via better-sqlite3 + Drizzle ORM |
-| Validation   | Zod                                     |
-| Auth         | bcrypt + signed session cookies         |
-| Analytics    | Google Analytics 4 (env-gated)          |
+| Concern    | Choice                                  |
+| ---------- | --------------------------------------- |
+| Framework  | TanStack Start (Vite + Nitro)           |
+| Routing    | TanStack Router (file-based)            |
+| UI         | React + TypeScript + Tailwind CSS       |
+| DB         | SQLite via better-sqlite3 + Drizzle ORM |
+| Validation | Zod                                     |
+| Auth       | bcrypt + signed session cookies         |
+| Analytics  | Google Analytics 4 (env-gated)          |
 
 ## Getting Started
 
@@ -46,11 +46,18 @@ App runs at `http://localhost:3000`.
 
 ### Environment Variables
 
-| Variable         | Description                  | Default               |
-| ---------------- | ---------------------------- | --------------------- |
-| `DATABASE_PATH`  | Path to SQLite database file | `./data/worddeck.db`  |
-| `APP_TIMEZONE`   | Timezone for daily word      | `Asia/Jakarta` (UTC+7) |
-| `GA_MEASUREMENT_ID` | Google Analytics ID       | _(disabled)_          |
+| Variable             | Description                                  | Default                                                |
+| -------------------- | -------------------------------------------- | ------------------------------------------------------ |
+| `DATABASE_PATH`      | Path to SQLite database file                 | `./data/worddeck.db`                                   |
+| `APP_TIMEZONE`       | Timezone for daily word                      | `Asia/Jakarta` (UTC+7)                                 |
+| `GA_MEASUREMENT_ID`  | Google Analytics ID                          | _(disabled)_                                           |
+| `SENTENCE_VALIDATOR` | Sentence validator mode: `ai` or `keyword`   | `ai` when `GEMINI_API_KEY` is set, otherwise `keyword` |
+| `GEMINI_API_KEY`     | Server-only Gemini API key for AI validation | _(keyword fallback)_                                   |
+| `GEMINI_MODEL`       | Gemini model used by the AI adapter          | `gemini-3.5-flash-lite`                                |
+
+When AI validation is enabled, the user's sentence and word context are sent to
+Gemini for checking. Sentences and provider responses are not stored or logged;
+the app falls back to keyword validation if Gemini is unavailable.
 
 ### Commands
 

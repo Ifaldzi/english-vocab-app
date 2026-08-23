@@ -1,12 +1,20 @@
 export interface ValidationResult {
   pass: boolean
   reason?: string
+  correction?: string
+}
+
+export interface SentenceValidationInput {
+  word: string
+  sentence: string
+  definition?: string
+  level?: string
+  kind?: string
 }
 
 export type SentenceValidator = (
-  word: string,
-  sentence: string,
-) => ValidationResult
+  input: SentenceValidationInput,
+) => Promise<ValidationResult>
 
 const MIN_TOKENS = 4
 
@@ -39,11 +47,12 @@ export function normalizeTokens(sentence: string): string[] {
 }
 
 /**
- * Keyword-matching sentence validator (FR-4).
- * Pluggable: can be swapped for an LLM implementation without touching
- * the rest of the flow.
+ * Deterministic keyword-matching validator (FR-4 fallback).
  */
-export const keywordValidator: SentenceValidator = (word, sentence) => {
+export function keywordValidator(
+  word: string,
+  sentence: string,
+): ValidationResult {
   const trimmed = sentence.trim()
   const tokens = normalizeTokens(trimmed)
   const variants = wordVariants(word)
@@ -74,8 +83,7 @@ export const keywordValidator: SentenceValidator = (word, sentence) => {
   return { pass: true }
 }
 
-/**
- * Default validator used by the app. Swap `validateSentence`'s implementation
- * here to swap the whole validation backend (e.g. to an LLM).
- */
-export const validateSentence: SentenceValidator = keywordValidator
+export const keywordSentenceValidator: SentenceValidator = async ({
+  word,
+  sentence,
+}) => keywordValidator(word, sentence)
