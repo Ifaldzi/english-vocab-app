@@ -1,4 +1,4 @@
-import { and, eq } from 'drizzle-orm'
+import { and, count, eq } from 'drizzle-orm'
 
 import { db } from '../db/index'
 import { userBadges, userStats, userWords, words } from '../db/schema'
@@ -100,7 +100,7 @@ export async function getOrCreateStats(userId: number) {
 
 export async function getMemorizedCount(userId: number): Promise<number> {
   const row = await db
-    .select({ count: db.$count(userWords) })
+    .select({ count: count() })
     .from(userWords)
     .where(eq(userWords.userId, userId))
     .get()
@@ -109,7 +109,7 @@ export async function getMemorizedCount(userId: number): Promise<number> {
 
 export async function getReviewTotal(userId: number): Promise<number> {
   const row = await db
-    .select({ total: db.$count(userWords) })
+    .select({ total: count() })
     .from(userWords)
     .where(eq(userWords.userId, userId))
     .get()
@@ -218,7 +218,7 @@ async function getReviewCorrectCount(userId: number): Promise<number> {
 
 async function getTotalWords(): Promise<number> {
   const row = await db
-    .select({ count: db.$count(words) })
+    .select({ count: count() })
     .from(words)
     .get()
   return Number(row?.count ?? TOTAL_WORDS)

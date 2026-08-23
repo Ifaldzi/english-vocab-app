@@ -1,4 +1,4 @@
-import { desc, eq } from 'drizzle-orm'
+import { count, desc, eq } from 'drizzle-orm'
 
 import { db } from '../db/index'
 import { badges, dailyWords, userBadges, userWords, words } from '../db/schema'
@@ -30,7 +30,7 @@ export async function getCefrBreakdown(userId: number) {
 
 export async function getTotalWords(): Promise<number> {
   const row = await db
-    .select({ count: db.$count(words) })
+    .select({ count: count() })
     .from(words)
     .get()
   return Number(row?.count ?? 0)
@@ -122,7 +122,7 @@ export async function getBadges(userId: number): Promise<BadgeView[]> {
 
 export async function getMemorizedTotal(userId: number): Promise<number> {
   const row = await db
-    .select({ count: db.$count(userWords) })
+    .select({ count: count() })
     .from(userWords)
     .where(eq(userWords.userId, userId))
     .get()
