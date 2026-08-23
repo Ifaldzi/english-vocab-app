@@ -52,7 +52,11 @@ function withKeywordFallback(primary: SentenceValidator): SentenceValidator {
   return async (input) => {
     try {
       return await primary(input)
-    } catch {
+    } catch (error) {
+      console.warn(
+        '[sentence-validation] AI validation failed; falling back to keyword validation',
+        { errorType: error instanceof Error ? error.name : 'UnknownError' },
+      )
       return keywordSentenceValidator(input)
     }
   }

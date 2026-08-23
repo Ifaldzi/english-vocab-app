@@ -115,6 +115,10 @@ describe('sentence validator selection', () => {
   })
 
   it('falls back to keyword validation when the AI request fails', async () => {
+    const warnings: Array<unknown[]> = []
+    const originalWarn = console.warn
+    console.warn = (...args: unknown[]) => warnings.push(args)
+
     const validator = createSentenceValidator({
       mode: 'ai',
       geminiApiKey: 'test-key',
@@ -123,9 +127,16 @@ describe('sentence validator selection', () => {
       },
     })
 
-    const result = await validator(input)
+    let result
+    try {
+      result = await validator(input)
+    } finally {
+      console.warn = originalWarn
+    }
 
     assert.equal(result.pass, true)
+    assert.equal(warnings.length, 1)
+    assert.match(String(warnings[0]?.[0]), /falling back to keyword validation/)
   })
 
   it('uses keyword validation when AI is not configured', async () => {
