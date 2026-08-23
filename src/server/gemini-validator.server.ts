@@ -8,7 +8,7 @@ import type {
 } from './validate'
 
 const DEFAULT_MODEL = 'gemini-3.5-flash-lite'
-const REQUEST_TIMEOUT_MS = 5_000
+const REQUEST_TIMEOUT_MS = 30_000
 
 const responseSchema = {
   type: 'object',
@@ -79,7 +79,6 @@ export function createGeminiValidatorFromApi(
         responseMimeType: 'application/json',
         responseJsonSchema: responseSchema,
         temperature: 0.1,
-        maxOutputTokens: 200,
       },
     })
     return response.text
