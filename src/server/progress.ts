@@ -79,14 +79,19 @@ export async function getRecentActivity(
     .orderBy(desc(userBadges.unlockedAt))
     .limit(Math.floor(limit * 0.5))
 
+  // Only surface words the user actually completed: daily/extra rows count
+  // only when the sentence passed (status='memorized'); review attempts are
+  // real events regardless of correct/incorrect.
   const items: ActivityItem[] = [
-    ...daily.map((r): ActivityItem => ({
-      id: `d${r.id}`,
-      kind: r.kind === 'review' ? 'reviewed' : 'memorized',
-      word: displayWord(r.word),
-      at: r.createdAt,
-      status: r.status as 'memorized' | 'failed',
-    })),
+    ...daily
+      .filter((r) => r.kind === 'review' || r.status === 'memorized')
+      .map((r): ActivityItem => ({
+        id: `d${r.id}`,
+        kind: r.kind === 'review' ? 'reviewed' : 'memorized',
+        word: displayWord(r.word),
+        at: r.createdAt,
+        status: r.status as 'memorized' | 'failed',
+      })),
     ...badgeEarned.map((b): ActivityItem => ({
       id: `b${b.id}`,
       kind: 'badge',
