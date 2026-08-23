@@ -1180,7 +1180,7 @@ h2.section {
     grid-area: word;
   }
   .layout.dash .dash-word .wordcard {
-    min-height: 100%;
+    min-height: max(100%, 300px);
     height: 100%;
   }
   .layout.dash .dash-word .wordcard .face {
