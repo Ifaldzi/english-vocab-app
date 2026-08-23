@@ -1,3 +1,57 @@
+# WordDeck
+
+English vocabulary learning app for Indonesian speakers. Features daily "Word of the Day" with flip-card UI, sentence validation, review mode (MCQ quiz), and gamification (XP, levels, streaks, badges). Uses Oxford 3000 word list (3,306 words) with CEFR labels and Indonesian translations.
+
+## Tech Stack
+
+TanStack Start + TanStack Router, React 19, TypeScript, Tailwind CSS 4, TanStack Query, SQLite (better-sqlite3 + Drizzle ORM), Zod, bcrypt session cookies, Lucide icons, GA4.
+
+## Project Structure
+
+```
+├── data/                  # Seed data (oxford_3000.json, oxford_3000.sql) and SQLite DB
+├── drizzle/               # Generated Drizzle migrations
+├── docs/                  # PRD.md, HTML mockups, plan
+├── scripts/               # seed.ts (words + badges)
+├── tests/                 # Unit tests (validate, selection, gamification)
+├── public/                # Static assets
+├── references/            # Oxford 3000 PDF source
+└── src/
+    ├── router.tsx         # TanStack Router factory
+    ├── routeTree.gen.ts   # Auto-generated route tree
+    ├── styles.css         # Global CSS (Tailwind)
+    ├── components/        # Shared UI (WordCard)
+    ├── db/                # Drizzle schema, connection, seed
+    ├── lib/               # Utilities (types, analytics, word formatting)
+    ├── server/            # Server functions, auth, word selection, gamification, review, progress
+    ├── integrations/      # TanStack Query provider + devtools
+    └── routes/            # File-based routes (__root, login, signup, _authenticated/*)
+```
+
+## Key Patterns
+
+- **Server Functions**: `*.functions.ts` in `src/server/` use `createServerFn` with Zod validators and auth middleware. Business logic in sibling `.ts` files.
+- **Auth**: Signed HttpOnly cookies (`wd_session`), bcrypt passwords, server-side session rows in SQLite.
+- **Word Selection**: ~10% recall probability from memorized pool, excludes today's words, soft-avoids yesterday's.
+- **Sentence Validation**: Pluggable `SentenceValidator` type. Current `keywordValidator` checks word presence + min 4 tokens.
+- **Database**: SQLite WAL mode, 8 tables (users, sessions, words, user_words, daily_words, user_stats, badges, user_badges).
+- **Routing**: File-based with `_authenticated` layout guard.
+
+## Commands
+
+```bash
+npm run dev          # Start dev server
+npm run build        # Production build
+npm run test         # Run unit tests (tsx --test)
+npx drizzle-kit push # Push schema to DB
+npx drizzle-kit studio # Open Drizzle Studio
+```
+
+## Conventions
+
+- **Commit Messages**: Always use [Conventional Commits](https://www.conventionalcommits.org/) format: `type(scope): subject` (e.g., `feat(auth): add login flow`, `fix(review): correct score calculation`). Types: `feat`, `fix`, `refactor`, `chore`, `docs`, `test`, `style`, `perf`.
+- **Commit & Push After Each Feature**: After finishing a feature implementation, commit the changes and push them to the remote branch.
+
 <!-- intent-skills:start -->
 
 # TanStack Intent - before editing files, run the matching guidance command.
