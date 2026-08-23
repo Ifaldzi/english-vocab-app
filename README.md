@@ -51,6 +51,8 @@ App runs at `http://localhost:3000`.
 | `DATABASE_PATH`      | Path to SQLite database file                 | `./data/worddeck.db`                                   |
 | `APP_TIMEZONE`       | Timezone for daily word                      | `Asia/Jakarta` (UTC+7)                                 |
 | `GA_MEASUREMENT_ID`  | Google Analytics ID                          | _(disabled)_                                           |
+| `GA4_MEASUREMENT_ID` | Server-side Google Analytics measurement ID  | _(disabled)_                                           |
+| `GA4_API_SECRET`     | Server-only Google Analytics API secret      | _(disabled)_                                           |
 | `SENTENCE_VALIDATOR` | Sentence validator mode: `ai` or `keyword`   | `ai` when `GEMINI_API_KEY` is set, otherwise `keyword` |
 | `GEMINI_API_KEY`     | Server-only Gemini API key for AI validation | _(keyword fallback)_                                   |
 | `GEMINI_MODEL`       | Gemini model used by the AI adapter          | `gemini-3.5-flash-lite`                                |
