@@ -7,6 +7,7 @@ import {
   stripHomographSuffix,
 } from '../src/server/validate'
 import { createSentenceValidator } from '../src/server/sentence-validator.server'
+import { extractJsonObject } from '../src/server/gemini-validator.server'
 
 describe('stripHomographSuffix', () => {
   it('strips trailing digits', () => {
@@ -99,6 +100,23 @@ describe('sentence validator selection', () => {
     assert.equal(result.correction, 'My journey to school is long.')
     assert.match(prompt, /journey/)
     assert.match(prompt, /My journey to school is long\./)
+  })
+
+  it('extracts JSON wrapped in provider prose and markdown', async () => {
+    const validator = createSentenceValidator({
+      mode: 'ai',
+      geminiApiKey: 'test-key',
+      generateGeminiContent: async () =>
+        'Here is the evaluation:\n```json\n{"pass":true}\n```\n',
+    })
+
+    const result = await validator(input)
+
+    assert.equal(result.pass, true)
+    assert.equal(
+      extractJsonObject('Result: {"pass":true} Thanks.'),
+      '{"pass":true}',
+    )
   })
 
   it('falls back to keyword validation for malformed AI output', async () => {

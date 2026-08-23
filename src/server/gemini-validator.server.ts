@@ -47,7 +47,9 @@ export function createGeminiValidator(
     const text = await generateContent(buildPrompt(input))
     if (!text) throw new Error('Empty AI validation response')
 
-    const parsed = responseValidator.safeParse(JSON.parse(text))
+    const parsed = responseValidator.safeParse(
+      JSON.parse(extractJsonObject(text)),
+    )
     if (!parsed.success) throw new Error('Invalid AI validation response')
 
     const result: ValidationResult = { pass: parsed.data.pass }
@@ -106,4 +108,58 @@ Rules:
 
 Learner data:
 ${context}`
+}
+
+/** Extract the first syntactically valid JSON object from model prose. */
+export function extractJsonObject(text: string): string {
+  for (
+    let start = text.indexOf('{');
+    start >= 0;
+    start = text.indexOf('{', start + 1)
+  ) {
+    const candidate = readBalancedObject(text, start)
+    if (!candidate) continue
+
+    try {
+      JSON.parse(candidate)
+      return candidate
+    } catch {
+      // Try the next object if prose contained an unrelated brace pair.
+    }
+  }
+
+  throw new Error('No JSON object in AI validation response')
+}
+
+function readBalancedObject(text: string, start: number): string | null {
+  let depth = 0
+  let escaped = false
+  let inString = false
+
+  for (let index = start; index < text.length; index += 1) {
+    const character = text[index]
+
+    if (inString) {
+      if (escaped) {
+        escaped = false
+      } else if (character === '\\') {
+        escaped = true
+      } else if (character === '"') {
+        inString = false
+      }
+      continue
+    }
+
+    if (character === '"') {
+      inString = true
+    } else if (character === '{') {
+      depth += 1
+    } else if (character === '}') {
+      depth -= 1
+      if (depth === 0) return text.slice(start, index + 1)
+      if (depth < 0) return null
+    }
+  }
+
+  return null
 }
