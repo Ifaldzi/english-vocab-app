@@ -29,7 +29,7 @@ export const Route = createFileRoute('/_authenticated')({
 function AuthenticatedLayout() {
   const router = useRouter()
   const location = useLocation()
-  const user = router.options.context.user
+  const { user } = Route.useRouteContext()
   const pathname = location.pathname
 
   const { data: progress } = useQuery({
