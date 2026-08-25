@@ -39,6 +39,8 @@ functional requirements in this document take precedence.
 - Review mode for previously memorized words.
 - Gamification: XP, levels, daily streak, badges/achievements.
 - Progress dashboard: total memorized vocabulary and breakdown by CEFR level.
+- Dedicated vocabulary library page reached from Progress: browse every available
+  word, search English words, filter by CEFR level, and open a word to learn it.
 - Seed the `words` table from the bundled Oxford 3000 dataset (3306 entries).
 - **Indonesian translations** — guaranteed present for every word in the `words`
   table (backfill of the seed data is complete; 0 missing rows as of 2026-08-01).
@@ -76,6 +78,12 @@ scaffold but practices by composing English sentences.
    multiple-choice definition quizzes.
 8. As a user, I can see my total memorized vocabulary and CEFR-level breakdown.
 9. As a user, I can see my level, XP, streak, and badges to stay motivated.
+10. As a user, I can browse all available vocabulary from the Progress page and see
+    which words I have memorized.
+11. As a user, I can search English words, filter the library by CEFR level, and use
+    numbered pagination to browse the results.
+12. As a user, I can open a vocabulary word to see its details and start the same
+    learn-and-validate flow used for a daily word when it is not memorized.
 
 ---
 
@@ -188,6 +196,30 @@ scaffold but practices by composing English sentences.
   streak. Only these two streak figures are shown in v1 (no per-week tally).
 - **FR-7.4** Badges grid with locked/unlocked states.
 - **FR-7.5** Recent activity feed (last ~10 events: word memorized, badge earned).
+- **FR-7.6** The vocabulary progress section includes a clear **View all
+  vocabularies** entry point that routes to a dedicated vocabulary library page.
+- **FR-7.7** The vocabulary library lists all words in the `words` table, including
+  each word's English spelling, Indonesian translation, CEFR level, and personal
+  memorization status. Memorized words show a status badge; words that are not
+  memorized are visually subdued/grayed out while remaining available to open. The
+  default list order is alphabetical by English word.
+- **FR-7.8** Search matches the English word only, using a case-insensitive
+  substring match. Indonesian translations, definitions, and example sentences are
+  not included in search matching.
+- **FR-7.9** A single-select level filter provides **All levels**, **A1**, **A2**,
+  **B1**, **B2**, and **C1**. Selecting a level with no matching words shows an
+  explicit empty state. The current Oxford seed contains A1–B2 entries; the C1
+  option remains part of the filter contract for compatible vocabulary data.
+- **FR-7.10** Results use numbered pagination with previous/next controls and a
+  visible current-page state. Applying or changing search/filter criteria resets
+  the result to page 1. Page size is an implementation detail and must be kept
+  consistent while browsing.
+- **FR-7.11** Selecting a word opens a detail view with its CEFR level, Indonesian
+  translation, English definition, and example sentence. An unmemorized word has a
+  **Learn this word** action that opens the existing flip-card and sentence
+  validation flow from FR-3 and FR-4 in a modal on the library page; it must not
+  navigate to another page. Memorized words remain browseable without a second
+  memorization action.
 
 ### FR-8 Gamification
 
@@ -271,7 +303,7 @@ user_badges  id, user_id FK, badge_code FK, unlocked_at
 ```
 
 Indexes: `user_words(user_id)`, `daily_words(user_id, date)`,
-`user_stats(user_id)`, `words(level)`.
+`user_stats(user_id)`, `words(level)`, `words(word)`.
 
 ---
 
@@ -343,7 +375,7 @@ Indexes: `user_words(user_id)`, `daily_words(user_id, date)`,
 - Add AI validation rate limiting, cost controls, and an evaluation set for
   learner sentences.
 - Spaced-repetition scheduling (SM-2) for review mode.
-- CEFR-level filter and per-level daily word targets.
+- Per-level daily word targets.
 - Pronunciation audio (free TTS API).
 - Dark/Light mode.
 - Export learning data / Anki import.

@@ -1,0 +1,725 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WordDeck — All Vocabularies</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="app">
+      <div class="sidebar">
+        <div class="sidebar-brand">
+          <span class="logo">WD</span><span>WordDeck</span>
+        </div>
+        <nav class="side-nav">
+          <a href="dashboard.html"><span class="ico">⌂</span>Home</a>
+          <a href="review.html"><span class="ico">↻</span>Review</a>
+          <a href="progress.html" class="active"
+            ><span class="ico">▤</span>Progress</a
+          >
+        </nav>
+        <div class="sidebar-foot">
+          <div class="mini-level">
+            <div class="head"><span>Lv 4</span><span>286 XP</span></div>
+            <div class="bar"><div style="width: 63%"></div></div>
+            <div class="lvl-name">Novice</div>
+          </div>
+          <div class="side-user">
+            <div class="avatar">A</div>
+            <div class="side-user-meta"><b>Andi</b><span>@andi</span></div>
+            <a href="login.html" class="side-logout">Logout</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="page">
+        <div class="topbar">
+          <div class="row">
+            <span class="brand">WordDeck</span>
+            <span class="top-title">All vocabularies</span>
+            <span class="spacer"></span>
+            <span class="pill user">Andi</span>
+          </div>
+        </div>
+
+        <main>
+          <div class="library-main">
+            <a class="library-back" href="progress.html">← Back to Progress</a>
+
+            <section class="card library-section" style="margin-top: 0">
+              <div class="section-header">
+                <div>
+                  <h1 class="section" style="margin-top: 0">
+                    All vocabularies
+                  </h1>
+                  <p class="muted library-intro">
+                    Browse the full Oxford 3000 list. Memorized words are
+                    highlighted; words still waiting to be learned are grayed
+                    out.
+                  </p>
+                </div>
+                <span class="chip kind">3306 words</span>
+              </div>
+
+              <div class="library-controls">
+                <label class="search-field">
+                  <span class="sr-only">Search English words</span>
+                  <input
+                    id="vocabSearch"
+                    type="search"
+                    placeholder="Search English words..."
+                    autocomplete="off"
+                  />
+                </label>
+                <label>
+                  <span class="sr-only">Filter by level</span>
+                  <select id="levelFilter">
+                    <option value="all">All levels</option>
+                    <option value="A1">A1</option>
+                    <option value="A2">A2</option>
+                    <option value="B1">B1</option>
+                    <option value="B2">B2</option>
+                    <option value="C1">C1</option>
+                  </select>
+                </label>
+              </div>
+
+              <div class="library-meta">
+                <span id="libraryResult">Showing 1–6 of 3306 words</span>
+                <div class="legend">
+                  <span class="status-badge memorized">Memorized</span>
+                  <span class="status-badge to-learn">To learn</span>
+                </div>
+              </div>
+
+              <div class="vocab-grid" id="vocabGrid">
+                <button
+                  class="vocab-card memorized"
+                  type="button"
+                  data-word="journey"
+                  data-level="A1"
+                  data-status="memorized"
+                  data-kind="n."
+                  data-translation="perjalanan"
+                  data-definition="An act of traveling from one place to another, especially when it is long or difficult."
+                  data-example="They went on a long journey across the country by train."
+                >
+                  <span class="vocab-card-top">
+                    <span class="vocab-level-kind">
+                      <span class="chip a1">A1</span>
+                      <span class="chip kind">n.</span>
+                    </span>
+                    <span class="status-badge memorized">Memorized</span>
+                  </span>
+                  <span class="vocab-word">journey</span>
+                  <span class="vocab-translation">perjalanan</span>
+                  <span class="vocab-card-foot"
+                    >Memorized 2 days ago <span>→</span></span
+                  >
+                </button>
+                <button
+                  class="vocab-card not-memorized"
+                  type="button"
+                  data-word="shelter"
+                  data-level="A2"
+                  data-status="to-learn"
+                  data-kind="n."
+                  data-translation="tempat berlindung"
+                  data-definition="A place giving temporary protection from bad weather or danger."
+                  data-example="The hikers found shelter before the storm arrived."
+                >
+                  <span class="vocab-card-top">
+                    <span class="vocab-level-kind">
+                      <span class="chip a2">A2</span>
+                      <span class="chip kind">n.</span>
+                    </span>
+                    <span class="status-badge to-learn">To learn</span>
+                  </span>
+                  <span class="vocab-word">shelter</span>
+                  <span class="vocab-translation">tempat berlindung</span>
+                  <span class="vocab-card-foot"
+                    >Not memorized <span>→</span></span
+                  >
+                </button>
+                <button
+                  class="vocab-card memorized"
+                  type="button"
+                  data-word="abundant"
+                  data-level="B2"
+                  data-status="memorized"
+                  data-kind="adj."
+                  data-translation="berlimpah"
+                  data-definition="Existing or available in large quantities; plentiful."
+                  data-example="Fresh fruit is abundant during the summer months."
+                >
+                  <span class="vocab-card-top">
+                    <span class="vocab-level-kind">
+                      <span class="chip b2">B2</span>
+                      <span class="chip kind">adj.</span>
+                    </span>
+                    <span class="status-badge memorized">Memorized</span>
+                  </span>
+                  <span class="vocab-word">abundant</span>
+                  <span class="vocab-translation">berlimpah</span>
+                  <span class="vocab-card-foot"
+                    >Memorized 5 days ago <span>→</span></span
+                  >
+                </button>
+                <button
+                  class="vocab-card not-memorized"
+                  type="button"
+                  data-word="comply"
+                  data-level="B1"
+                  data-status="to-learn"
+                  data-kind="v."
+                  data-translation="mematuhi"
+                  data-definition="To act in accordance with a wish or command."
+                  data-example="All visitors must comply with the safety rules."
+                >
+                  <span class="vocab-card-top">
+                    <span class="vocab-level-kind">
+                      <span class="chip b1">B1</span>
+                      <span class="chip kind">v.</span>
+                    </span>
+                    <span class="status-badge to-learn">To learn</span>
+                  </span>
+                  <span class="vocab-word">comply</span>
+                  <span class="vocab-translation">mematuhi</span>
+                  <span class="vocab-card-foot"
+                    >Not memorized <span>→</span></span
+                  >
+                </button>
+                <button
+                  class="vocab-card memorized"
+                  type="button"
+                  data-word="genuine"
+                  data-level="B1"
+                  data-status="memorized"
+                  data-kind="adj."
+                  data-translation="asli; tulus"
+                  data-definition="Real and exactly what it appears to be; not fake."
+                  data-example="She gave me a genuine smile when we met."
+                >
+                  <span class="vocab-card-top">
+                    <span class="vocab-level-kind">
+                      <span class="chip b1">B1</span>
+                      <span class="chip kind">adj.</span>
+                    </span>
+                    <span class="status-badge memorized">Memorized</span>
+                  </span>
+                  <span class="vocab-word">genuine</span>
+                  <span class="vocab-translation">asli; tulus</span>
+                  <span class="vocab-card-foot"
+                    >Memorized yesterday <span>→</span></span
+                  >
+                </button>
+                <button
+                  class="vocab-card not-memorized"
+                  type="button"
+                  data-word="meticulous"
+                  data-level="B2"
+                  data-status="to-learn"
+                  data-kind="adj."
+                  data-translation="teliti"
+                  data-definition="Showing great attention to detail; very careful and precise."
+                  data-example="He is meticulous about checking every detail."
+                >
+                  <span class="vocab-card-top">
+                    <span class="vocab-level-kind">
+                      <span class="chip b2">B2</span>
+                      <span class="chip kind">adj.</span>
+                    </span>
+                    <span class="status-badge to-learn">To learn</span>
+                  </span>
+                  <span class="vocab-word">meticulous</span>
+                  <span class="vocab-translation">teliti</span>
+                  <span class="vocab-card-foot"
+                    >Not memorized <span>→</span></span
+                  >
+                </button>
+                <button
+                  class="vocab-card not-memorized"
+                  type="button"
+                  data-word="feasible"
+                  data-level="B2"
+                  data-status="to-learn"
+                  data-kind="adj."
+                  data-translation="layak; dapat dilakukan"
+                  data-definition="Possible to do easily or conveniently; practical."
+                  data-example="The team proposed a feasible solution."
+                >
+                  <span class="vocab-card-top">
+                    <span class="vocab-level-kind">
+                      <span class="chip b2">B2</span>
+                      <span class="chip kind">adj.</span>
+                    </span>
+                    <span class="status-badge to-learn">To learn</span>
+                  </span>
+                  <span class="vocab-word">feasible</span>
+                  <span class="vocab-translation">layak; dapat dilakukan</span>
+                  <span class="vocab-card-foot"
+                    >Not memorized <span>→</span></span
+                  >
+                </button>
+                <button
+                  class="vocab-card not-memorized"
+                  type="button"
+                  data-word="resilient"
+                  data-level="B2"
+                  data-status="to-learn"
+                  data-kind="adj."
+                  data-translation="tangguh"
+                  data-definition="Able to withstand or recover quickly from difficult conditions."
+                  data-example="The resilient community rebuilt after the flood."
+                >
+                  <span class="vocab-card-top">
+                    <span class="vocab-level-kind">
+                      <span class="chip b2">B2</span>
+                      <span class="chip kind">adj.</span>
+                    </span>
+                    <span class="status-badge to-learn">To learn</span>
+                  </span>
+                  <span class="vocab-word">resilient</span>
+                  <span class="vocab-translation">tangguh</span>
+                  <span class="vocab-card-foot"
+                    >Not memorized <span>→</span></span
+                  >
+                </button>
+              </div>
+              <div class="library-empty" id="libraryEmpty">
+                <strong>No words found</strong>
+                <p class="muted mt">Try another search or level filter.</p>
+              </div>
+
+              <div class="pagination" aria-label="Vocabulary pages">
+                <button
+                  class="page-button"
+                  type="button"
+                  disabled
+                  aria-label="Previous page"
+                >
+                  ←
+                </button>
+                <button
+                  class="page-button active"
+                  type="button"
+                  data-page="1"
+                  aria-current="page"
+                >
+                  1
+                </button>
+                <button class="page-button" type="button" data-page="2">
+                  2
+                </button>
+                <button class="page-button" type="button">3</button>
+                <span class="page-gap">...</span>
+                <button class="page-button" type="button">414</button>
+                <button
+                  class="page-button"
+                  type="button"
+                  aria-label="Next page"
+                >
+                  →
+                </button>
+              </div>
+            </section>
+          </div>
+
+          <div class="nav">
+            <a href="dashboard.html"><span class="ico">⌂</span>Home</a>
+            <a href="review.html"><span class="ico">↻</span>Review</a>
+            <a href="progress.html" class="active"
+              ><span class="ico">▤</span>Progress</a
+            >
+            <a href="login.html"><span class="ico">→</span>Logout</a>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <div class="modal-overlay" id="vocabModal">
+      <div
+        class="modal vocab-detail"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="detailWord"
+      >
+        <div class="modal-head">
+          <span class="modal-title">Vocabulary detail</span>
+          <button
+            class="modal-close"
+            id="closeVocabModal"
+            type="button"
+            aria-label="Close"
+          >
+            ×
+          </button>
+        </div>
+        <div class="vocab-detail-head">
+          <div>
+            <div class="vocab-detail-word" id="detailWord">journey</div>
+            <div class="vocab-detail-translation" id="detailTranslation">
+              perjalanan
+            </div>
+          </div>
+          <div class="vocab-level-kind">
+            <span class="chip a1" id="detailLevel">A1</span>
+            <span class="chip kind" id="detailKind">n.</span>
+            <span class="status-badge memorized" id="detailStatus"
+              >Memorized</span
+            >
+          </div>
+        </div>
+        <div class="label">Definition</div>
+        <div class="detail-definition" id="detailDefinition">
+          An act of traveling from one place to another, especially when it is
+          long or difficult.
+        </div>
+        <div class="label">Example</div>
+        <div class="detail-example" id="detailExample">
+          They went on a long journey across the country by train.
+        </div>
+        <button class="btn btn-primary" id="learnButton" type="button">
+          Learn this word
+        </button>
+        <p class="learn-note" id="learnNote">
+          This word is already memorized. Open Review to practice it again.
+        </p>
+      </div>
+    </div>
+
+    <div class="modal-overlay" id="learnModal">
+      <div
+        class="modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="learnWord"
+      >
+        <div class="modal-head">
+          <span class="modal-title">Learn this word</span>
+          <button
+            class="modal-close"
+            id="closeLearnModal"
+            type="button"
+            aria-label="Close"
+          >
+            ×
+          </button>
+        </div>
+
+        <div class="stage">
+          <div
+            class="card-wrap"
+            id="learnCard"
+            role="button"
+            aria-label="Flip card"
+            tabindex="0"
+          >
+            <div class="face front">
+              <div class="part">Learn this word</div>
+              <div class="chips">
+                <span class="chip a1" id="learnLevel">A1</span>
+                <span class="chip kind" id="learnKind">n.</span>
+              </div>
+              <div class="word" id="learnWord">journey</div>
+              <div class="type" id="learnType">noun</div>
+              <div class="tap-hint">Tap card to reveal</div>
+            </div>
+            <div class="face back">
+              <div class="back-top">
+                <span class="back-word" id="learnBackWord">journey</span>
+                <span class="back-type" id="learnBackType">noun</span>
+              </div>
+              <div class="label">Definition</div>
+              <div class="definition" id="learnDefinition">
+                An act of traveling from one place to another, especially when
+                it is long or difficult.
+              </div>
+              <div class="label">Translation</div>
+              <div class="translation" id="learnTranslation">perjalanan</div>
+              <div class="label">Example</div>
+              <div class="example" id="learnExample">
+                "They went on a long journey across the country by train."
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="prove">
+          <div class="prove-title">Prove you know it</div>
+          <div class="prove-sub">
+            Write a sentence using <b id="learnPromptWord">"journey"</b> to lock
+            this card in.
+          </div>
+          <textarea
+            id="learnSentence"
+            placeholder="Type your own sentence with the word journey..."
+          ></textarea>
+          <p class="helper">
+            The word must appear in your sentence (min. 4 words). Punctuation
+            and capitals are ignored.
+          </p>
+          <button
+            class="btn btn-primary mt"
+            id="checkLearnSentence"
+            type="button"
+          >
+            Check my sentence
+          </button>
+          <div class="banner inline success" id="learnOkBanner">
+            ✓ Correct — this word is now locked in. Nice work.
+          </div>
+          <div class="banner inline failure" id="learnNoBanner">
+            ✗ Not quite.
+            <div class="reasons" id="learnNoReasons"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mock-note">Mockup — <a href="index.html">back to hub</a></div>
+
+    <script>
+      var vocabCards = Array.prototype.slice.call(
+        document.querySelectorAll('.vocab-card[data-word]'),
+      )
+      var vocabModal = document.getElementById('vocabModal')
+      var learnModal = document.getElementById('learnModal')
+      var selectedCard = null
+      var activePage = 1
+      var pageSize = 6
+      var detailFields = {
+        word: document.getElementById('detailWord'),
+        translation: document.getElementById('detailTranslation'),
+        level: document.getElementById('detailLevel'),
+        kind: document.getElementById('detailKind'),
+        status: document.getElementById('detailStatus'),
+        definition: document.getElementById('detailDefinition'),
+        example: document.getElementById('detailExample'),
+      }
+      var learnFields = {
+        word: document.getElementById('learnWord'),
+        backWord: document.getElementById('learnBackWord'),
+        level: document.getElementById('learnLevel'),
+        kind: document.getElementById('learnKind'),
+        type: document.getElementById('learnType'),
+        backType: document.getElementById('learnBackType'),
+        definition: document.getElementById('learnDefinition'),
+        translation: document.getElementById('learnTranslation'),
+        example: document.getElementById('learnExample'),
+        promptWord: document.getElementById('learnPromptWord'),
+      }
+
+      function matches(card) {
+        var query = document
+          .getElementById('vocabSearch')
+          .value.trim()
+          .toLowerCase()
+        var level = document.getElementById('levelFilter').value
+        return (
+          card.dataset.word.toLowerCase().indexOf(query) !== -1 &&
+          (level === 'all' || card.dataset.level === level)
+        )
+      }
+
+      function renderVocab() {
+        var matched = vocabCards.filter(matches)
+        var visible = matched.slice(
+          (activePage - 1) * pageSize,
+          activePage * pageSize,
+        )
+        vocabCards.forEach(function (card) {
+          card.style.display = visible.indexOf(card) !== -1 ? '' : 'none'
+        })
+        document
+          .getElementById('libraryEmpty')
+          .classList.toggle('show', matched.length === 0)
+        document
+          .querySelectorAll('.page-button[data-page]')
+          .forEach(function (page) {
+            var isActive = Number(page.dataset.page) === activePage
+            page.classList.toggle('active', isActive)
+            if (isActive) page.setAttribute('aria-current', 'page')
+            else page.removeAttribute('aria-current')
+          })
+        document.getElementById('libraryResult').textContent =
+          matched.length === 0
+            ? '0 matching words'
+            : 'Showing ' +
+              ((activePage - 1) * pageSize + 1) +
+              '–' +
+              Math.min(activePage * pageSize, matched.length) +
+              ' of ' +
+              (matched.length === vocabCards.length ? '3306' : matched.length) +
+              ' words'
+      }
+
+      function wordType(kind) {
+        if (kind === 'n.') return 'noun'
+        if (kind === 'v.') return 'verb'
+        return 'adjective'
+      }
+
+      function openVocabModal(card) {
+        selectedCard = card
+        detailFields.word.textContent = card.dataset.word
+        detailFields.translation.textContent = card.dataset.translation
+        detailFields.level.textContent = card.dataset.level
+        detailFields.level.className =
+          'chip ' + card.dataset.level.toLowerCase()
+        detailFields.kind.textContent = card.dataset.kind
+        detailFields.status.textContent =
+          card.dataset.status === 'memorized' ? 'Memorized' : 'To learn'
+        detailFields.status.className =
+          'status-badge ' +
+          (card.dataset.status === 'memorized' ? 'memorized' : 'to-learn')
+        detailFields.definition.textContent = card.dataset.definition
+        detailFields.example.textContent = card.dataset.example
+        var isMemorized = card.dataset.status === 'memorized'
+        document.getElementById('learnButton').style.display = isMemorized
+          ? 'none'
+          : 'inline-flex'
+        document
+          .getElementById('learnNote')
+          .classList.toggle('show', isMemorized)
+        vocabModal.classList.add('open')
+        document.body.style.overflow = 'hidden'
+      }
+
+      function openLearnModal(card) {
+        var type = wordType(card.dataset.kind)
+        learnFields.word.textContent = card.dataset.word
+        learnFields.backWord.textContent = card.dataset.word
+        learnFields.level.textContent = card.dataset.level
+        learnFields.level.className = 'chip ' + card.dataset.level.toLowerCase()
+        learnFields.kind.textContent = card.dataset.kind
+        learnFields.type.textContent = type
+        learnFields.backType.textContent = type
+        learnFields.definition.textContent = card.dataset.definition
+        learnFields.translation.textContent = card.dataset.translation
+        learnFields.example.textContent = '"' + card.dataset.example + '"'
+        learnFields.promptWord.textContent = '"' + card.dataset.word + '"'
+        document.getElementById('learnSentence').value = ''
+        document.getElementById('learnSentence').placeholder =
+          'Type your own sentence with the word ' + card.dataset.word + '...'
+        document.getElementById('learnCard').classList.remove('flipped')
+        document.getElementById('learnOkBanner').classList.remove('show')
+        document.getElementById('learnNoBanner').classList.remove('show')
+        learnModal.classList.add('open')
+        document.body.style.overflow = 'hidden'
+      }
+
+      function closeModal(modal) {
+        modal.classList.remove('open')
+        if (
+          !vocabModal.classList.contains('open') &&
+          !learnModal.classList.contains('open')
+        ) {
+          document.body.style.overflow = ''
+        }
+      }
+
+      vocabCards.forEach(function (card) {
+        card.addEventListener('click', function () {
+          openVocabModal(card)
+        })
+      })
+      document
+        .getElementById('vocabSearch')
+        .addEventListener('input', function () {
+          activePage = 1
+          renderVocab()
+        })
+      document
+        .getElementById('levelFilter')
+        .addEventListener('change', function () {
+          activePage = 1
+          renderVocab()
+        })
+      document
+        .querySelectorAll('.page-button[data-page]')
+        .forEach(function (button) {
+          button.addEventListener('click', function () {
+            activePage = Number(button.dataset.page)
+            renderVocab()
+          })
+        })
+      document
+        .getElementById('closeVocabModal')
+        .addEventListener('click', function () {
+          closeModal(vocabModal)
+        })
+      document
+        .getElementById('closeLearnModal')
+        .addEventListener('click', function () {
+          closeModal(learnModal)
+        })
+      document
+        .getElementById('learnButton')
+        .addEventListener('click', function () {
+          closeModal(vocabModal)
+          openLearnModal(selectedCard)
+        })
+      document
+        .getElementById('learnCard')
+        .addEventListener('click', function () {
+          document.getElementById('learnCard').classList.toggle('flipped')
+        })
+      document
+        .getElementById('learnCard')
+        .addEventListener('keydown', function (event) {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault()
+            document.getElementById('learnCard').classList.toggle('flipped')
+          }
+        })
+      document
+        .getElementById('checkLearnSentence')
+        .addEventListener('click', function () {
+          var word = selectedCard.dataset.word
+          var text = document.getElementById('learnSentence').value.trim()
+          var wordCount = text.split(/\s+/).filter(function (token) {
+            return token.length > 0
+          }).length
+          var hasWord = new RegExp('\\b' + word + '\\b', 'i').test(text)
+          var reasons = document.getElementById('learnNoReasons')
+          if (!hasWord && wordCount < 4) {
+            reasons.textContent =
+              'The word "' +
+              word +
+              '" is missing and the sentence is too short (min. 4 words).'
+          } else if (!hasWord) {
+            reasons.textContent =
+              'Your sentence needs to include the word "' + word + '".'
+          } else if (wordCount < 4) {
+            reasons.textContent =
+              'That is only ' + wordCount + ' word(s) — write at least 4.'
+          }
+          if (hasWord && wordCount >= 4) {
+            document.getElementById('learnNoBanner').classList.remove('show')
+            document.getElementById('learnOkBanner').classList.add('show')
+            setTimeout(function () {
+              closeModal(learnModal)
+            }, 1200)
+          } else {
+            document.getElementById('learnOkBanner').classList.remove('show')
+            document.getElementById('learnNoBanner').classList.add('show')
+          }
+        })
+      vocabModal.addEventListener('click', function (event) {
+        if (event.target === vocabModal) closeModal(vocabModal)
+      })
+      learnModal.addEventListener('click', function (event) {
+        if (event.target === learnModal) closeModal(learnModal)
+      })
+      document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape') {
+          closeModal(vocabModal)
+          closeModal(learnModal)
+        }
+      })
+      renderVocab()
+    </script>
+  </body>
+</html>
