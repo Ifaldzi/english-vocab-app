@@ -45,9 +45,16 @@ function AuthenticatedLayout() {
 
   const isHome = pathname === '/'
   const isReview = pathname === '/review'
-  const isProgress = pathname === '/progress'
+  const isProgress = pathname === '/progress' || pathname === '/vocabularies'
+  const isVocabulary = pathname === '/vocabularies'
 
-  const topTitle = isHome ? 'Today' : isReview ? 'Review' : 'Progress'
+  const topTitle = isHome
+    ? 'Today'
+    : isReview
+      ? 'Review'
+      : isVocabulary
+        ? 'All vocabularies'
+        : 'Progress'
 
   const stats = progress?.stats
   const memorized = progress?.memorized ?? 0
@@ -78,7 +85,7 @@ function AuthenticatedLayout() {
             </span>
             Review
           </Link>
-          <Link to="/progress" activeProps={{ className: 'active' }}>
+          <Link to="/progress" className={isProgress ? 'active' : undefined}>
             <span className="ico">
               <BarChart3 size={16} />
             </span>

@@ -1,4 +1,6 @@
-export type Level = 'A1' | 'A2' | 'B1' | 'B2'
+export type Level = 'A1' | 'A2' | 'B1' | 'B2' | 'C1'
+export type ProgressLevel = Exclude<Level, 'C1'>
+export type VocabularyFilterLevel = 'all' | Level
 
 export interface SessionUser {
   id: number
@@ -13,6 +15,19 @@ export interface Word {
   definition: string
   indonesia: string
   sentenceExample: string
+}
+
+export interface VocabularyItem extends Word {
+  memorized: boolean
+  memorizedAt?: number
+}
+
+export interface VocabularyPage {
+  items: VocabularyItem[]
+  total: number
+  page: number
+  pageSize: number
+  totalPages: number
 }
 
 export interface StatsView {

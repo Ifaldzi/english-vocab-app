@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, Link } from '@tanstack/react-router'
 import { useQuery } from '@tanstack/react-query'
 import {
   Play,
@@ -104,9 +104,18 @@ function ProgressPage() {
       </div>
 
       <div className="card fill">
-        <h2 className="section" style={{ marginTop: 0 }}>
-          Vocabulary progress
-        </h2>
+        <div className="section-header">
+          <h2 className="section" style={{ marginTop: 0 }}>
+            Vocabulary progress
+          </h2>
+          <Link
+            className="btn btn-ghost library-link"
+            to="/vocabularies"
+            search={{ q: '', level: 'all', page: 1 }}
+          >
+            View all vocabularies
+          </Link>
+        </div>
         <div className="row" style={{ alignItems: 'baseline' }}>
           <div style={{ fontWeight: 800, fontSize: 17 }} className="grow">
             {memorized} / {totalWords} memorized

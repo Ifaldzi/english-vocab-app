@@ -3,7 +3,7 @@ import { count, desc, eq } from 'drizzle-orm'
 import { db } from '../db/index'
 import { badges, dailyWords, userBadges, userWords, words } from '../db/schema'
 import { displayWord } from '../lib/word'
-import type { ActivityItem, BadgeView, Level } from '../lib/types'
+import type { ActivityItem, BadgeView, ProgressLevel } from '../lib/types'
 import {
   getOrCreateStats,
   levelFromXp,
@@ -11,7 +11,7 @@ import {
   xpForNextLevel,
 } from './gamification'
 
-export const LEVELS: Level[] = ['A1', 'A2', 'B1', 'B2']
+export const LEVELS: ProgressLevel[] = ['A1', 'A2', 'B1', 'B2']
 
 export async function getCefrBreakdown(userId: number) {
   const rows = await db
@@ -21,31 +21,38 @@ export async function getCefrBreakdown(userId: number) {
     .where(eq(userWords.userId, userId))
     .all()
 
-  const counts: Record<string, number> = { A1: 0, A2: 0, B1: 0, B2: 0 }
+  const counts: Record<ProgressLevel, number> = {
+    A1: 0,
+    A2: 0,
+    B1: 0,
+    B2: 0,
+  }
   for (const r of rows) {
-    if (r.level in counts) counts[r.level]++
+    if (isProgressLevel(r.level)) counts[r.level]++
   }
   return LEVELS.map((level) => ({ level, count: counts[level] }))
 }
 
 export async function getTotalWords(): Promise<number> {
-  const row = await db
-    .select({ count: count() })
-    .from(words)
-    .get()
+  const row = await db.select({ count: count() }).from(words).get()
   return Number(row?.count ?? 0)
 }
 
 /** Total word count per CEFR level (for the vocabulary breakdown bars). */
 export async function getCefrTotals(): Promise<
-  { level: Level; total: number }[]
+  { level: ProgressLevel; total: number }[]
 > {
   const rows = await db.select({ level: words.level }).from(words).all()
-  const totals: Record<string, number> = { A1: 0, A2: 0, B1: 0, B2: 0 }
-  for (const r of rows) {
-    if (r.level in totals) totals[r.level]++
+  const totals: Record<ProgressLevel, number> = {
+    A1: 0,
+    A2: 0,
+    B1: 0,
+    B2: 0,
   }
-  return LEVELS.map((level) => ({ level, total: totals[level] ?? 0 }))
+  for (const r of rows) {
+    if (isProgressLevel(r.level)) totals[r.level]++
+  }
+  return LEVELS.map((level) => ({ level, total: totals[level] }))
 }
 
 export async function getRecentActivity(
@@ -148,3 +155,7 @@ export async function getStatsView(userId: number) {
 }
 
 export { levelFromXp, levelTitle, xpForNextLevel }
+
+function isProgressLevel(level: string): level is ProgressLevel {
+  return level === 'A1' || level === 'A2' || level === 'B1' || level === 'B2'
+}

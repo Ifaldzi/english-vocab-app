@@ -167,6 +167,11 @@ main {
   color: #fafafa;
   border: 1px solid #737373;
 }
+.chip.c1 {
+  background: #171717;
+  color: #fafafa;
+  border: 1px solid #a3a3a3;
+}
 .chip.kind {
   background: transparent;
   border: 1px solid #525252;
@@ -523,7 +528,8 @@ main {
 textarea,
 input[type='email'],
 input[type='password'],
-input[type='text'] {
+input[type='text'],
+input[type='search'] {
   width: 100%;
   border: 1px solid #333;
   background: #141414;
@@ -983,6 +989,294 @@ h2.section {
   color: #0a0a0a;
 }
 
+/* Vocabulary library */
+.section-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+.section-header .section {
+  margin-bottom: 0;
+}
+.library-heading {
+  font-size: 20px;
+  margin-top: 0;
+}
+.library-link {
+  width: auto;
+  padding: 9px 12px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+.library-main {
+  max-width: 980px;
+  margin: 0 auto;
+}
+.library-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: #a3a3a3;
+  font-size: 13px;
+  margin-bottom: 16px;
+  text-decoration: underline;
+}
+.library-back:hover {
+  color: #fafafa;
+}
+.library-intro {
+  max-width: 600px;
+  margin-top: 6px;
+}
+.library-controls {
+  display: flex;
+  gap: 10px;
+  margin-top: 18px;
+}
+.search-field {
+  position: relative;
+  flex: 1;
+}
+.search-field input,
+.library-controls select {
+  min-height: 44px;
+  border: 1px solid #333;
+  background: #0f0f0f;
+  color: #fafafa;
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-size: 14px;
+  font-family: inherit;
+}
+.search-field input {
+  padding-left: 38px;
+}
+.search-field .search-icon {
+  position: absolute;
+  left: 12px;
+  top: 14px;
+  color: #737373;
+  pointer-events: none;
+}
+.search-field input:focus,
+.library-controls select:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+.library-controls select {
+  width: 150px;
+  cursor: pointer;
+}
+.library-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 18px;
+  color: #a3a3a3;
+  font-size: 12px;
+}
+.library-meta .legend {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 3px 8px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+.status-badge.memorized {
+  background: rgba(251, 191, 36, 0.14);
+  color: var(--accent);
+}
+.status-badge.to-learn {
+  border: 1px solid #404040;
+  color: #a3a3a3;
+}
+.vocab-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 12px;
+}
+.vocab-card {
+  width: 100%;
+  min-height: 126px;
+  border: 1px solid #262626;
+  border-radius: 14px;
+  background: #0f0f0f;
+  color: #fafafa;
+  padding: 14px;
+  text-align: left;
+  font-family: inherit;
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    opacity 0.2s ease;
+}
+.vocab-card:hover,
+.vocab-card:focus-visible {
+  outline: none;
+  border-color: #737373;
+  background: #181818;
+}
+.vocab-card.not-memorized {
+  opacity: 0.54;
+  filter: grayscale(1);
+}
+.vocab-card.not-memorized:hover,
+.vocab-card.not-memorized:focus-visible {
+  opacity: 0.82;
+}
+.vocab-card-top,
+.vocab-card-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.vocab-level-kind {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.vocab-word,
+.vocab-translation {
+  display: block;
+}
+.vocab-word {
+  margin-top: 14px;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+}
+.vocab-translation {
+  margin-top: 2px;
+  color: #a3a3a3;
+  font-size: 13px;
+}
+.vocab-card-foot {
+  margin-top: 12px;
+  color: #737373;
+  font-size: 11px;
+}
+.library-empty {
+  display: none;
+  border: 1px dashed #404040;
+  border-radius: 14px;
+  padding: 28px 16px;
+  margin-top: 12px;
+  text-align: center;
+}
+.library-empty.show {
+  display: block;
+}
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 18px;
+}
+.page-button {
+  min-width: 34px;
+  height: 34px;
+  border: 1px solid #333;
+  border-radius: 9px;
+  background: transparent;
+  color: #a3a3a3;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.page-button:hover,
+.page-button.active {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--accent-text);
+}
+.page-button[disabled] {
+  cursor: default;
+  opacity: 0.45;
+}
+.page-gap {
+  color: #525252;
+  padding: 0 2px;
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+.vocab-detail-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid #262626;
+}
+.vocab-detail-word {
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: -1px;
+}
+.vocab-detail-translation {
+  color: #a3a3a3;
+  font-size: 15px;
+  margin-top: 2px;
+}
+.vocab-detail .label {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #737373;
+  margin: 18px 0 6px;
+}
+.vocab-detail .detail-definition {
+  font-size: 15px;
+  font-weight: 600;
+}
+.vocab-detail .detail-example {
+  border-left: 3px solid #737373;
+  padding-left: 12px;
+  color: #a3a3a3;
+  font-size: 14px;
+  font-style: italic;
+}
+.vocab-detail .btn {
+  margin-top: 20px;
+}
+.vocab-detail .learn-note {
+  display: none;
+  color: #737373;
+  font-size: 12px;
+  margin-top: 10px;
+}
+.vocab-detail .learn-note.show {
+  display: block;
+}
+
 /* ===== Responsive desktop layout ===== */
 .layout {
   display: grid;
@@ -1262,6 +1556,35 @@ h2.section {
   }
   main {
     padding: 20px 28px 48px;
+  }
+}
+
+@media (max-width: 599px) {
+  .section-header {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .library-link {
+    width: auto;
+  }
+  .library-controls {
+    flex-direction: column;
+  }
+  .library-controls select {
+    width: 100%;
+  }
+  .library-meta {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .library-meta .legend {
+    justify-content: flex-start;
+  }
+  .vocab-grid {
+    grid-template-columns: 1fr;
+  }
+  .vocab-detail-head {
+    flex-direction: column;
   }
 }
 

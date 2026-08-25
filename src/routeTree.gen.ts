@@ -16,6 +16,7 @@ import { Route as SignupRouteImport } from './routes/signup'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
 import { Route as AuthenticatedProgressRouteImport } from './routes/_authenticated/progress'
 import { Route as AuthenticatedReviewRouteImport } from './routes/_authenticated/review'
+import { Route as AuthenticatedVocabulariesRouteImport } from './routes/_authenticated/vocabularies'
 import { Route as ApiDebugcookieRouteImport } from './routes/api/debugcookie'
 import { Route as ApiGaRouteImport } from './routes/api/ga'
 
@@ -53,6 +54,12 @@ const AuthenticatedReviewRoute = AuthenticatedReviewRouteImport.update({
   path: '/review',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedVocabulariesRoute =
+  AuthenticatedVocabulariesRouteImport.update({
+    id: '/vocabularies',
+    path: '/vocabularies',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const ApiDebugcookieRoute = ApiDebugcookieRouteImport.update({
   id: '/api/debugcookie',
   path: '/api/debugcookie',
@@ -71,6 +78,7 @@ export interface FileRoutesByFullPath {
   '/signup': typeof SignupRoute
   '/progress': typeof AuthenticatedProgressRoute
   '/review': typeof AuthenticatedReviewRoute
+  '/vocabularies': typeof AuthenticatedVocabulariesRoute
   '/api/debugcookie': typeof ApiDebugcookieRoute
   '/api/ga': typeof ApiGaRoute
 }
@@ -80,6 +88,7 @@ export interface FileRoutesByTo {
   '/signup': typeof SignupRoute
   '/progress': typeof AuthenticatedProgressRoute
   '/review': typeof AuthenticatedReviewRoute
+  '/vocabularies': typeof AuthenticatedVocabulariesRoute
   '/api/debugcookie': typeof ApiDebugcookieRoute
   '/api/ga': typeof ApiGaRoute
   '/': typeof AuthenticatedIndexRoute
@@ -92,6 +101,7 @@ export interface FileRoutesById {
   '/signup': typeof SignupRoute
   '/_authenticated/progress': typeof AuthenticatedProgressRoute
   '/_authenticated/review': typeof AuthenticatedReviewRoute
+  '/_authenticated/vocabularies': typeof AuthenticatedVocabulariesRoute
   '/api/debugcookie': typeof ApiDebugcookieRoute
   '/api/ga': typeof ApiGaRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
@@ -105,6 +115,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/progress'
     | '/review'
+    | '/vocabularies'
     | '/api/debugcookie'
     | '/api/ga'
   fileRoutesByTo: FileRoutesByTo
@@ -114,6 +125,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/progress'
     | '/review'
+    | '/vocabularies'
     | '/api/debugcookie'
     | '/api/ga'
     | '/'
@@ -125,6 +137,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/_authenticated/progress'
     | '/_authenticated/review'
+    | '/_authenticated/vocabularies'
     | '/api/debugcookie'
     | '/api/ga'
     | '/_authenticated/'
@@ -190,6 +203,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedReviewRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/vocabularies': {
+      id: '/_authenticated/vocabularies'
+      path: '/vocabularies'
+      fullPath: '/vocabularies'
+      preLoaderRoute: typeof AuthenticatedVocabulariesRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/api/debugcookie': {
       id: '/api/debugcookie'
       path: '/api/debugcookie'
@@ -210,12 +230,14 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteChildren {
   AuthenticatedProgressRoute: typeof AuthenticatedProgressRoute
   AuthenticatedReviewRoute: typeof AuthenticatedReviewRoute
+  AuthenticatedVocabulariesRoute: typeof AuthenticatedVocabulariesRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedProgressRoute: AuthenticatedProgressRoute,
   AuthenticatedReviewRoute: AuthenticatedReviewRoute,
+  AuthenticatedVocabulariesRoute: AuthenticatedVocabulariesRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
 }
 

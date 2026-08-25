@@ -2,6 +2,7 @@ import { and, eq } from 'drizzle-orm'
 
 import { db } from '../db/index'
 import { dailyWords, userWords, words } from '../db/schema'
+import type { Level } from '../lib/types'
 import { todayKey } from './gamification'
 
 export type WordRow = typeof words.$inferSelect
@@ -10,7 +11,7 @@ export function toWord(row: WordRow) {
   return {
     id: row.id,
     word: row.word,
-    level: row.level as 'A1' | 'A2' | 'B1' | 'B2',
+    level: row.level as Level,
     kind: row.kind,
     definition: row.definition,
     indonesia: row.indonesia,
