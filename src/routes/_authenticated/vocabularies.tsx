@@ -18,7 +18,6 @@ const FILTER_LEVELS: VocabularyFilterLevel[] = [
   'A2',
   'B1',
   'B2',
-  'C1',
 ]
 const SEARCH_DEBOUNCE_MS = 300
 

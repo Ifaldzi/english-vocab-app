@@ -21,10 +21,10 @@ describe('vocabulary search', () => {
 })
 
 describe('vocabulary levels', () => {
-  it('accepts the supported levels, including C1', () => {
+  it('accepts the supported levels, excluding C1', () => {
     assert.equal(isVocabularyLevel('all'), false)
     assert.equal(isVocabularyLevel('A1'), true)
-    assert.equal(isVocabularyLevel('C1'), true)
+    assert.equal(isVocabularyLevel('C1'), false)
     assert.equal(isVocabularyLevel('C2'), false)
   })
 })
