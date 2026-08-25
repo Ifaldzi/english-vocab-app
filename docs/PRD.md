@@ -18,8 +18,9 @@ lets the user re-practice words they have already memorized.
 
 The UI is specified by a set of **static HTML mockups** in `docs/mockup/`
 (`index.html` is the hub; screens: `login`, `dashboard`, `card`, `success`,
-`failure`, `review`, `progress`). They define the visual direction — monochrome
-base with a warm amber accent for rewards & CTAs — and serve as the reference
+`failure`, `review`, `progress`). They define the visual direction — a dark
+monochrome base with a warm amber accent for rewards & CTAs, plus a light mode
+using warm ivory surfaces and the same yellow family — and serve as the reference
 for the implemented UI. Numbers/words shown in the mockups are illustrative;
 functional requirements in this document take precedence.
 
@@ -41,6 +42,8 @@ functional requirements in this document take precedence.
 - Progress dashboard: total memorized vocabulary and breakdown by CEFR level.
 - Dedicated vocabulary library page reached from Progress: browse every available
   word, search English words, filter by CEFR level, and open a word to learn it.
+- Light/dark appearance toggle with dark mode as the default and a warm,
+  yellow-tinted light mode.
 - Seed the `words` table from the bundled Oxford 3000 dataset (3306 entries).
 - **Indonesian translations** — guaranteed present for every word in the `words`
   table (backfill of the seed data is complete; 0 missing rows as of 2026-08-01).
@@ -84,6 +87,8 @@ scaffold but practices by composing English sentences.
     numbered pagination to browse the results.
 12. As a user, I can open a vocabulary word to see its details and start the same
     learn-and-validate flow used for a daily word when it is not memorized.
+13. As a user, I can switch between dark and light mode, and my preference is
+    remembered when I return to the app.
 
 ---
 
@@ -271,6 +276,24 @@ scaffold but practices by composing English sentences.
 - **FR-9.6** A small `analytics` client module wraps `gtag` so events are typed and
   the call sites stay framework-agnostic.
 
+### FR-10 Appearance
+
+- **FR-10.1** The app supports `dark` and `light` themes. Dark mode is the default
+  and preserves the current monochrome UI with warm amber accents.
+- **FR-10.2** Light mode uses a pure white page background with warm ivory and
+  sand surfaces, dark brown text, and the exact same lemon-yellow accent tokens
+  as dark mode (`#fbbf24` with `#f59e0b` hover) so it feels like the same product
+  rather than a separate visual theme.
+- **FR-10.3** A clearly labeled theme toggle is available on authentication and
+  authenticated screens. The control exposes the current action to assistive
+  technology and supports keyboard focus.
+- **FR-10.4** The selected theme is stored in browser local storage and restored on
+  reload and navigation. Theme preference is device-local and is not persisted in
+  the account database.
+- **FR-10.5** Theme changes apply to the full app shell, cards, forms, dialogs,
+  navigation, status messages, progress elements, and focus states without
+  changing learning data or layout behavior.
+
 ---
 
 ## 6. Data Model
@@ -310,6 +333,8 @@ Indexes: `user_words(user_id)`, `daily_words(user_id, date)`,
 ## 7. Non-Functional Requirements
 
 - **Responsive** — mobile-first layout; daily usage expected on phones.
+- **Accessibility** — theme controls have an accessible name and both themes must
+  retain readable text, visible borders, and keyboard focus indicators.
 - **Performance** — single-server SQLite; daily word lookup and stats queries are
   indexed and must return < 100 ms.
 - **Security** — bcrypt password hashing; `HttpOnly`/`SameSite` session cookies;
@@ -377,7 +402,6 @@ Indexes: `user_words(user_id)`, `daily_words(user_id, date)`,
 - Spaced-repetition scheduling (SM-2) for review mode.
 - Per-level daily word targets.
 - Pronunciation audio (free TTS API).
-- Dark/Light mode.
 - Export learning data / Anki import.
 
 ---

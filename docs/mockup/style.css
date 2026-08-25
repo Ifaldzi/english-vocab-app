@@ -1568,3 +1568,188 @@ h2.section {
     grid-template-columns: 1fr;
   }
 }
+
+/* Theme switch: dark is the reference palette; light keeps its amber character. */
+.theme-toggle {
+  border: 1px solid #404040;
+  border-radius: 999px;
+  background: transparent;
+  color: #a3a3a3;
+  padding: 6px 10px;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.theme-toggle:hover,
+.theme-toggle:focus-visible {
+  border-color: var(--accent);
+  color: var(--accent);
+  outline: none;
+}
+.auth-wrap {
+  position: relative;
+}
+.auth-theme {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+}
+
+body[data-theme='light'] {
+  --accent: #fbbf24;
+  --accent-hover: #f59e0b;
+  --accent-dim: #78350f;
+  --accent-text: #0a0a0a;
+  background: #ffffff;
+  color: #2b2110;
+}
+body[data-theme='light'] .app,
+body[data-theme='light'] .auth-wrap {
+  background: #ffffff;
+}
+body[data-theme='light'] .topbar,
+body[data-theme='light'] .sidebar,
+body[data-theme='light'] .nav {
+  background: #fffdf7;
+  border-color: #eadfca;
+}
+body[data-theme='light'] .card,
+body[data-theme='light'] .stat,
+body[data-theme='light'] .badge-item,
+body[data-theme='light'] .flash,
+body[data-theme='light'] .wordcard .face,
+body[data-theme='light'] .stage .face,
+body[data-theme='light'] .auth-card,
+body[data-theme='light'] .vocab-card {
+  background: #fffdf7;
+  border-color: #eadfca;
+  box-shadow: 0 24px 60px rgba(126, 91, 28, 0.1);
+}
+body[data-theme='light'] .modal {
+  background: #ffffff;
+  border-color: #ddcba8;
+  box-shadow: 0 24px 80px rgba(89, 60, 14, 0.22);
+}
+body[data-theme='light'] .btn,
+body[data-theme='light'] .btn-ghost {
+  color: #2b2110;
+  border-color: #d8c8a9;
+}
+body[data-theme='light'] .btn:hover,
+body[data-theme='light'] .vocab-card:hover,
+body[data-theme='light'] .vocab-card:focus-visible,
+body[data-theme='light'] .side-nav a:hover {
+  background: #fff1c9;
+}
+body[data-theme='light'] .theme-toggle {
+  border-color: #d8c8a9;
+  color: #765a25;
+}
+body[data-theme='light'] .pill,
+body[data-theme='light'] .chip.kind,
+body[data-theme='light'] .page-button {
+  border-color: #d8c8a9;
+  color: #765a25;
+}
+body[data-theme='light'] .muted,
+body[data-theme='light'] .helper,
+body[data-theme='light'] .auth-card .sub,
+body[data-theme='light'] .auth-alt,
+body[data-theme='light'] .stat .lab,
+body[data-theme='light'] h2.section,
+body[data-theme='light'] .modal-title,
+body[data-theme='light'] .prove .prove-title,
+body[data-theme='light'] .vocab-detail .label,
+body[data-theme='light'] .library-meta,
+body[data-theme='light'] .vocab-card-foot,
+body[data-theme='light'] .feed-meta,
+body[data-theme='light'] .side-user-meta span,
+body[data-theme='light'] .side-logout,
+body[data-theme='light'] .side-nav a,
+body[data-theme='light'] .nav a,
+body[data-theme='light'] .nav button,
+body[data-theme='light'] .flash .q,
+body[data-theme='light'] .search-field .search-icon {
+  color: #806d4c;
+}
+body[data-theme='light'] .wordcard .front .word,
+body[data-theme='light'] .stage .front .word,
+body[data-theme='light'] .banner.failure,
+body[data-theme='light'] .mcq .opt.correct,
+body[data-theme='light'] .mcq .opt.wrong,
+body[data-theme='light'] .prove .prove-sub b,
+body[data-theme='light'] .vocab-card,
+body[data-theme='light'] .page-button {
+  color: #2b2110;
+}
+body[data-theme='light'] .prove .prove-sub {
+  color: #594722;
+}
+body[data-theme='light'] textarea,
+body[data-theme='light'] input,
+body[data-theme='light'] .search-field input,
+body[data-theme='light'] .library-controls select,
+body[data-theme='light'] .wordcard .back .translation,
+body[data-theme='light'] .stage .back .translation,
+body[data-theme='light'] .translation {
+  background: #fffaf0;
+  color: #2b2110;
+  border-color: #d8c8a9;
+}
+body[data-theme='light'] textarea::placeholder,
+body[data-theme='light'] input::placeholder {
+  color: #a08d6b;
+}
+body[data-theme='light'] .chip.a1 {
+  background: #fff0c2;
+  color: #59400d;
+}
+body[data-theme='light'] .chip.a2 {
+  background: #f7df9e;
+  color: #59400d;
+}
+body[data-theme='light'] .chip.b1 {
+  background: #d6b66b;
+  color: #38270b;
+}
+body[data-theme='light'] .chip.b2 {
+  background: #a98237;
+  color: #fffaf0;
+  border-color: #a98237;
+}
+body[data-theme='light'] .bar {
+  background: #eee1c5;
+}
+body[data-theme='light'] .modal-overlay {
+  background: rgba(32, 32, 32, 0.42);
+}
+body[data-theme='light'] .feed-item,
+body[data-theme='light'] .modal .prove,
+body[data-theme='light'] .wordcard .back .back-top,
+body[data-theme='light'] .stage .back .back-top,
+body[data-theme='light'] .vocab-detail-head {
+  border-color: #eadfca;
+}
+body[data-theme='light'] .wordcard .back .example,
+body[data-theme='light'] .stage .back .example,
+body[data-theme='light'] .example,
+body[data-theme='light'] .vocab-detail .detail-example {
+  border-left-color: #d1a94c;
+  color: #806d4c;
+}
+body[data-theme='light'] .status-badge.memorized {
+  background: rgba(251, 191, 36, 0.14);
+}
+body[data-theme='light'] .status-badge.to-learn,
+body[data-theme='light'] .library-empty {
+  border-color: #d8c8a9;
+  color: #806d4c;
+}
+body[data-theme='light'] .side-nav a.active {
+  background: rgba(251, 191, 36, 0.13);
+}
+body[data-theme='light'] .vocab-card.not-memorized {
+  opacity: 0.58;
+}

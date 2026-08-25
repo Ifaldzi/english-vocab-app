@@ -27,12 +27,18 @@
           style="font-weight: 800; font-size: 18px; text-transform: uppercase"
           >WordDeck</span
         >
-        <span class="chip kind">Mockup</span>
+         <div style="display: flex; align-items: center; gap: 8px">
+           <button class="theme-toggle" type="button" data-theme-toggle>
+             Light mode
+           </button>
+           <span class="chip kind">Mockup</span>
+         </div>
       </header>
 
       <p class="muted" style="margin-bottom: 24px">
-        Monochrome base with a warm amber accent for rewards &amp; CTAs. Numbers
-        shown are illustrative only.
+        Dark mode is the default. Light mode keeps the same warm amber character
+        with ivory surfaces and yellow-tinted neutrals. Numbers shown are
+        illustrative only.
       </p>
 
       <div style="display: flex; flex-direction: column; gap: 10px">
@@ -237,5 +243,6 @@
     </div>
 
     <div class="mock-note">Mockup — <a href="index.html">back to hub</a></div>
+    <script src="theme-toggle.js"></script>
   </body>
 </html>
