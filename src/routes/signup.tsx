@@ -9,6 +9,7 @@ import { useState } from 'react'
 import type { FormEvent } from 'react'
 import { signupFn } from '../server/auth/auth.functions'
 import { trackEvent } from '../lib/analytics'
+import { ThemeToggle } from '../components/ThemeToggle'
 
 // Validate redirect target to prevent open redirect attacks.
 function sanitizeRedirect(url: unknown): string {
@@ -63,6 +64,7 @@ function SignupPage() {
 
   return (
     <div className="auth-wrap">
+      <ThemeToggle />
       <div className="auth-card">
         <div className="auth-logo">WD</div>
         <h1>Create your account</h1>

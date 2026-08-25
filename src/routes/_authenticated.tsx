@@ -11,6 +11,7 @@ import { Home, RotateCcw, BarChart3, LogOut } from 'lucide-react'
 
 import { getProgressFn } from '../server/progress/progress.functions'
 import { logoutFn } from '../server/auth/auth.functions'
+import { ThemeToggle } from '../components/ThemeToggle'
 
 export const Route = createFileRoute('/_authenticated')({
   beforeLoad: ({ context, location }) => {
@@ -128,6 +129,7 @@ function AuthenticatedLayout() {
             <span className="brand">WordDeck</span>
             <span className="top-title">{topTitle}</span>
             <span className="spacer" />
+            <ThemeToggle />
             {isHome && stats ? (
               <span className="pill streak">{stats.streak}-day streak</span>
             ) : isReview ? (

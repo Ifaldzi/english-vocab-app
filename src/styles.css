@@ -1606,3 +1606,197 @@ h2.section {
     grid-template-columns: repeat(3, 1fr);
   }
 }
+
+/* Theme switch: dark is the reference palette; light keeps its lemon accent. */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid #404040;
+  border-radius: 999px;
+  background: transparent;
+  color: #a3a3a3;
+  padding: 6px 11px;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.theme-toggle:hover,
+.theme-toggle:focus-visible {
+  border-color: var(--accent);
+  color: var(--accent);
+  outline: none;
+}
+.auth-wrap {
+  position: relative;
+}
+.auth-wrap > .theme-toggle {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+}
+
+html[data-theme='light'] {
+  --accent: #fbbf24;
+  --accent-hover: #f59e0b;
+  --accent-dim: #78350f;
+  --accent-text: #0a0a0a;
+  background: #ffffff;
+  color: #2b2110;
+}
+html[data-theme='light'] body {
+  background: #ffffff;
+  color: #2b2110;
+}
+html[data-theme='light'] .app,
+html[data-theme='light'] .auth-wrap {
+  background: #ffffff;
+}
+html[data-theme='light'] .topbar,
+html[data-theme='light'] .sidebar,
+html[data-theme='light'] .nav {
+  background: #fffdf7;
+  border-color: #eadfca;
+}
+html[data-theme='light'] .card,
+html[data-theme='light'] .stat,
+html[data-theme='light'] .badge-item,
+html[data-theme='light'] .flash,
+html[data-theme='light'] .wordcard .face,
+html[data-theme='light'] .stage .face,
+html[data-theme='light'] .auth-card,
+html[data-theme='light'] .mini-level,
+html[data-theme='light'] .vocab-card {
+  background: #fffdf7;
+  border-color: #eadfca;
+  box-shadow: 0 24px 60px rgba(126, 91, 28, 0.1);
+}
+html[data-theme='light'] .modal {
+  background: #ffffff;
+  border-color: #ddcba8;
+  box-shadow: 0 24px 80px rgba(89, 60, 14, 0.22);
+}
+html[data-theme='light'] .btn,
+html[data-theme='light'] .btn-ghost {
+  color: #2b2110;
+  border-color: #d8c8a9;
+}
+html[data-theme='light'] .btn:hover,
+html[data-theme='light'] .vocab-card:hover,
+html[data-theme='light'] .vocab-card:focus-visible,
+html[data-theme='light'] .side-nav a:hover {
+  background: #fff1c9;
+}
+html[data-theme='light'] .theme-toggle {
+  border-color: #d8c8a9;
+  color: #765a25;
+}
+html[data-theme='light'] .pill,
+html[data-theme='light'] .chip.kind,
+html[data-theme='light'] .page-button {
+  border-color: #d8c8a9;
+  color: #765a25;
+}
+html[data-theme='light'] .muted,
+html[data-theme='light'] .helper,
+html[data-theme='light'] .auth-card .sub,
+html[data-theme='light'] .auth-alt,
+html[data-theme='light'] .stat .lab,
+html[data-theme='light'] h2.section,
+html[data-theme='light'] .modal-title,
+html[data-theme='light'] .prove .prove-title,
+html[data-theme='light'] .vocab-detail .label,
+html[data-theme='light'] .library-meta,
+html[data-theme='light'] .vocab-card-foot,
+html[data-theme='light'] .feed-meta,
+html[data-theme='light'] .side-user-meta span,
+html[data-theme='light'] .side-logout,
+html[data-theme='light'] .side-nav a,
+html[data-theme='light'] .nav a,
+html[data-theme='light'] .nav button,
+html[data-theme='light'] .flash .q,
+html[data-theme='light'] .search-field .search-icon,
+html[data-theme='light'] .library-back {
+  color: #806d4c;
+}
+html[data-theme='light'] .wordcard .front .word,
+html[data-theme='light'] .stage .front .word,
+html[data-theme='light'] .banner.failure,
+html[data-theme='light'] .mcq .opt.correct,
+html[data-theme='light'] .mcq .opt.wrong,
+html[data-theme='light'] .prove .prove-sub b,
+html[data-theme='light'] .vocab-card,
+html[data-theme='light'] .page-button {
+  color: #2b2110;
+}
+html[data-theme='light'] .prove .prove-sub {
+  color: #594722;
+}
+html[data-theme='light'] textarea,
+html[data-theme='light'] input,
+html[data-theme='light'] .search-field input,
+html[data-theme='light'] .library-controls select,
+html[data-theme='light'] .wordcard .back .translation,
+html[data-theme='light'] .stage .back .translation,
+html[data-theme='light'] .translation {
+  background: #fffaf0;
+  color: #2b2110;
+  border-color: #d8c8a9;
+}
+html[data-theme='light'] textarea::placeholder,
+html[data-theme='light'] input::placeholder {
+  color: #a08d6b;
+}
+html[data-theme='light'] .chip.a1 {
+  background: #fff0c2;
+  color: #59400d;
+}
+html[data-theme='light'] .chip.a2 {
+  background: #f7df9e;
+  color: #59400d;
+}
+html[data-theme='light'] .chip.b1 {
+  background: #d6b66b;
+  color: #38270b;
+}
+html[data-theme='light'] .chip.b2 {
+  background: #a98237;
+  color: #fffaf0;
+  border-color: #a98237;
+}
+html[data-theme='light'] .bar {
+  background: #eee1c5;
+}
+html[data-theme='light'] .modal-overlay {
+  background: rgba(32, 32, 32, 0.42);
+}
+html[data-theme='light'] .feed-item,
+html[data-theme='light'] .modal .prove,
+html[data-theme='light'] .wordcard .back .back-top,
+html[data-theme='light'] .stage .back .back-top,
+html[data-theme='light'] .vocab-detail-head {
+  border-color: #eadfca;
+}
+html[data-theme='light'] .wordcard .back .example,
+html[data-theme='light'] .stage .back .example,
+html[data-theme='light'] .example,
+html[data-theme='light'] .vocab-detail .detail-example {
+  border-left-color: #d1a94c;
+  color: #806d4c;
+}
+html[data-theme='light'] .status-badge.memorized {
+  background: rgba(251, 191, 36, 0.14);
+}
+html[data-theme='light'] .status-badge.to-learn,
+html[data-theme='light'] .library-empty {
+  border-color: #d8c8a9;
+  color: #806d4c;
+}
+html[data-theme='light'] .side-nav a.active {
+  background: rgba(251, 191, 36, 0.13);
+}
+html[data-theme='light'] .vocab-card.not-memorized {
+  opacity: 0.58;
+}
