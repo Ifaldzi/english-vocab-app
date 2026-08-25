@@ -91,7 +91,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       <head>
         <HeadContent />
       </head>
-      <body>
+      <body suppressHydrationWarning>
         {children}
         {GA_MEASUREMENT_ID ? <GtagPageView /> : null}
         <TanStackDevtools
