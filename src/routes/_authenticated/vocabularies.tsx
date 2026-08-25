@@ -10,7 +10,7 @@ import type {
   VocabularyItem,
   Word,
 } from '../../lib/types'
-import { getVocabularyFn } from '../../server/vocabulary.functions'
+import { getVocabularyFn } from '../../server/vocabulary/vocabulary.functions'
 
 const FILTER_LEVELS: VocabularyFilterLevel[] = [
   'all',

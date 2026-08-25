@@ -2,16 +2,22 @@ import { sql } from 'drizzle-orm'
 
 import { db } from './src/db/index'
 import { users } from './src/db/schema'
-import { getDailyWordForUser, getExtraWordForUser } from './src/server/words'
-import { studyValidateSentence } from './src/server/study'
-import { getNextReviewQuestion, submitReviewAnswer } from './src/server/review'
+import {
+  getDailyWordForUser,
+  getExtraWordForUser,
+} from './src/server/words/words'
+import { studyValidateSentence } from './src/server/study/study'
+import {
+  getNextReviewQuestion,
+  submitReviewAnswer,
+} from './src/server/review/review'
 import {
   getStatsView,
   getCefrBreakdown,
   getMemorizedTotal,
   getTotalWords,
-} from './src/server/progress'
-import { todayKey } from './src/server/gamification'
+} from './src/server/progress/progress'
+import { todayKey } from './src/server/gamification/gamification'
 
 async function main() {
   const now = Date.now()

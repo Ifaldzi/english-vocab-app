@@ -7,7 +7,7 @@ import {
 } from '@tanstack/react-router'
 import { useState } from 'react'
 import type { FormEvent } from 'react'
-import { signupFn } from '../server/auth.functions'
+import { signupFn } from '../server/auth/auth.functions'
 import { trackEvent } from '../lib/analytics'
 
 // Validate redirect target to prevent open redirect attacks.

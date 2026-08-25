@@ -1,7 +1,7 @@
 import { and, count, eq } from 'drizzle-orm'
 
-import { db } from '../db/index'
-import { userBadges, userStats, userWords, words } from '../db/schema'
+import { db } from '../../db/index'
+import { userBadges, userStats, userWords, words } from '../../db/schema'
 
 export const XP_NEW_WORD = 10
 export const XP_REVIEW = 5
@@ -217,10 +217,7 @@ async function getReviewCorrectCount(userId: number): Promise<number> {
 }
 
 async function getTotalWords(): Promise<number> {
-  const row = await db
-    .select({ count: count() })
-    .from(words)
-    .get()
+  const row = await db.select({ count: count() }).from(words).get()
   return Number(row?.count ?? TOTAL_WORDS)
 }
 

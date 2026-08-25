@@ -18,7 +18,7 @@ import {
   Rocket,
 } from 'lucide-react'
 
-import { getProgressFn } from '../../server/progress.functions'
+import { getProgressFn } from '../../server/progress/progress.functions'
 
 export const Route = createFileRoute('/_authenticated/progress')({
   component: ProgressPage,

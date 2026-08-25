@@ -1,9 +1,9 @@
 import { and, eq } from 'drizzle-orm'
 
-import { db } from '../db/index'
-import { dailyWords, userWords, words } from '../db/schema'
-import { displayWord } from '../lib/word'
-import { validateSentence } from './sentence-validator.server'
+import { db } from '../../db/index'
+import { dailyWords, userWords, words } from '../../db/schema'
+import { displayWord } from '../../lib/word'
+import { validateSentence } from '../validation/sentence-validator.server'
 import {
   awardXp,
   bumpStreak,
@@ -12,7 +12,7 @@ import {
   unlockEligibleBadges,
   XP_DAILY_COMPLETE,
   XP_NEW_WORD,
-} from './gamification'
+} from '../gamification/gamification'
 
 /**
  * Validates a user's sentence and — on success — closes the card:

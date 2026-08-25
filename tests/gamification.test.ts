@@ -7,7 +7,7 @@ import {
   xpForNextLevel,
   levelTitle,
   todayKey,
-} from '../src/server/gamification'
+} from '../src/server/gamification/gamification'
 
 describe('level curve (FR-8.2)', () => {
   it('maps cumulative XP thresholds to levels', () => {

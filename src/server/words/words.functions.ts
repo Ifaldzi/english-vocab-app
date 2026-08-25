@@ -1,13 +1,13 @@
 import { createServerFn } from '@tanstack/react-start'
 import { eq } from 'drizzle-orm'
 
-import { db } from '../db/index'
-import { words } from '../db/schema'
-import { authMiddleware } from './auth-middleware'
+import { db } from '../../db/index'
+import { words } from '../../db/schema'
+import { authMiddleware } from '../auth/auth-middleware'
 import { getDailyWordForUser, getExtraWordForUser } from './words'
-import { validateSentence } from './sentence-validator.server'
-import { todayKey } from './gamification'
-import type { Word } from '../lib/types'
+import { validateSentence } from '../validation/sentence-validator.server'
+import { todayKey } from '../gamification/gamification'
+import type { Word } from '../../lib/types'
 
 /** Returns today's selected word (or null if the pool is exhausted). */
 export const getDailyWordFn = createServerFn({ method: 'GET' })

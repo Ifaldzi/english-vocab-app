@@ -1,7 +1,7 @@
 import { createServerFn } from '@tanstack/react-start'
 
-import type { VocabularyFilterLevel } from '../lib/types'
-import { authMiddleware } from './auth-middleware'
+import type { VocabularyFilterLevel } from '../../lib/types'
+import { authMiddleware } from '../auth/auth-middleware'
 import { getVocabularyPage, isVocabularyLevel } from './vocabulary'
 
 export const getVocabularyFn = createServerFn({ method: 'GET' })

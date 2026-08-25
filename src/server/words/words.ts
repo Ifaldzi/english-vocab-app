@@ -1,9 +1,9 @@
 import { and, eq } from 'drizzle-orm'
 
-import { db } from '../db/index'
-import { dailyWords, userWords, words } from '../db/schema'
-import type { Level } from '../lib/types'
-import { todayKey } from './gamification'
+import { db } from '../../db/index'
+import { dailyWords, userWords, words } from '../../db/schema'
+import type { Level } from '../../lib/types'
+import { todayKey } from '../gamification/gamification'
 
 export type WordRow = typeof words.$inferSelect
 

@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { getCookie, getRequest } from '@tanstack/react-start/server'
-import { getCurrentSession } from '../../server/session'
+import { getCurrentSession } from '../../server/auth/session'
 
 export const Route = createFileRoute('/api/debugcookie')({
   server: {

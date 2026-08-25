@@ -1,15 +1,21 @@
 import { count, desc, eq } from 'drizzle-orm'
 
-import { db } from '../db/index'
-import { badges, dailyWords, userBadges, userWords, words } from '../db/schema'
-import { displayWord } from '../lib/word'
-import type { ActivityItem, BadgeView, ProgressLevel } from '../lib/types'
+import { db } from '../../db/index'
+import {
+  badges,
+  dailyWords,
+  userBadges,
+  userWords,
+  words,
+} from '../../db/schema'
+import { displayWord } from '../../lib/word'
+import type { ActivityItem, BadgeView, ProgressLevel } from '../../lib/types'
 import {
   getOrCreateStats,
   levelFromXp,
   levelTitle,
   xpForNextLevel,
-} from './gamification'
+} from '../gamification/gamification'
 
 export const LEVELS: ProgressLevel[] = ['A1', 'A2', 'B1', 'B2']
 

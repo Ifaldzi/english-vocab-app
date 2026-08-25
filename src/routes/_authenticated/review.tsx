@@ -6,10 +6,10 @@ import { Check, X } from 'lucide-react'
 import {
   getReviewQuestionFn,
   answerReviewFn,
-} from '../../server/review.functions'
+} from '../../server/review/review.functions'
 import { displayWord } from '../../lib/word'
 import { trackEvent } from '../../lib/analytics'
-import type { ReviewQuestionPayload } from '../../server/review'
+import type { ReviewQuestionPayload } from '../../server/review/review'
 
 export const Route = createFileRoute('/_authenticated/review')({
   component: ReviewPage,

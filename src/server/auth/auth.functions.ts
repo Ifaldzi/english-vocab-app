@@ -3,8 +3,8 @@ import bcrypt from 'bcryptjs'
 import { eq } from 'drizzle-orm'
 import { z } from 'zod'
 
-import { db } from '../db/index'
-import { users } from '../db/schema'
+import { db } from '../../db/index'
+import { users } from '../../db/schema'
 import { authMiddleware } from './auth-middleware'
 import {
   createSession,

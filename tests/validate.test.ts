@@ -5,9 +5,9 @@ import {
   keywordValidator,
   wordVariants,
   stripHomographSuffix,
-} from '../src/server/validate'
-import { createSentenceValidator } from '../src/server/sentence-validator.server'
-import { extractJsonObject } from '../src/server/gemini-validator.server'
+} from '../src/server/validation/validate'
+import { createSentenceValidator } from '../src/server/validation/sentence-validator.server'
+import { extractJsonObject } from '../src/server/validation/gemini-validator.server'
 
 describe('stripHomographSuffix', () => {
   it('strips trailing digits', () => {

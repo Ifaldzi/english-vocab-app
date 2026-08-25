@@ -13,7 +13,7 @@ import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
 import appCss from '../styles.css?url'
 
 import type { QueryClient } from '@tanstack/react-query'
-import { getUserFn } from '../server/auth.functions'
+import { getUserFn } from '../server/auth/auth.functions'
 import type { SessionUser } from '../lib/types'
 import { GA_MEASUREMENT_ID } from '../lib/env'
 

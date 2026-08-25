@@ -1,14 +1,14 @@
 import { and, asc, count, eq, sql } from 'drizzle-orm'
 
-import { db } from '../db/index'
-import { userWords, words } from '../db/schema'
+import { db } from '../../db/index'
+import { userWords, words } from '../../db/schema'
 import type {
   Level,
   VocabularyFilterLevel,
   VocabularyItem,
   VocabularyPage,
-} from '../lib/types'
-import { toWord } from './words'
+} from '../../lib/types'
+import { toWord } from '../words/words'
 
 export const VOCABULARY_PAGE_SIZE = 6
 

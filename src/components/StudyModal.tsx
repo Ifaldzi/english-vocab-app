@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Check, X } from 'lucide-react'
 
-import { submitSentenceFn } from '../server/study.functions'
+import { submitSentenceFn } from '../server/study/study.functions'
 import { displayWord } from '../lib/word'
 import type { Word } from '../lib/types'
 import { trackEvent } from '../lib/analytics'

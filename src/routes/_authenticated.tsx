@@ -9,8 +9,8 @@ import {
 import { useQuery } from '@tanstack/react-query'
 import { Home, RotateCcw, BarChart3, LogOut } from 'lucide-react'
 
-import { getProgressFn } from '../server/progress.functions'
-import { logoutFn } from '../server/auth.functions'
+import { getProgressFn } from '../server/progress/progress.functions'
+import { logoutFn } from '../server/auth/auth.functions'
 
 export const Route = createFileRoute('/_authenticated')({
   beforeLoad: ({ context, location }) => {

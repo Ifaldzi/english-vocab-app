@@ -1,14 +1,14 @@
 import { and, asc, eq, notInArray } from 'drizzle-orm'
 
-import { db } from '../db/index'
-import { dailyWords, userWords, words } from '../db/schema'
+import { db } from '../../db/index'
+import { dailyWords, userWords, words } from '../../db/schema'
 import {
   awardXp,
   getOrCreateStats,
   todayKey,
   unlockEligibleBadges,
   XP_REVIEW,
-} from './gamification'
+} from '../gamification/gamification'
 
 export interface ReviewQuestionPayload {
   wordId: number

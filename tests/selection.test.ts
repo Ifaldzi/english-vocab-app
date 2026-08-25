@@ -1,8 +1,8 @@
 import { describe, it } from 'node:test'
 import assert from 'node:assert/strict'
 
-import { chooseFromPools } from '../src/server/words'
-import { buildOptions } from '../src/server/review'
+import { chooseFromPools } from '../src/server/words/words'
+import { buildOptions } from '../src/server/review/review'
 
 describe('chooseFromPools (FR-2.2)', () => {
   it('picks the recall pool when the new pool is empty', () => {

@@ -1,6 +1,6 @@
 import { createServerFn } from '@tanstack/react-start'
 
-import { authMiddleware } from './auth-middleware'
+import { authMiddleware } from '../auth/auth-middleware'
 import { getNextReviewQuestion, submitReviewAnswer } from './review'
 
 /** Fetches the next review question (FR-6). Returns null when the review is done. */

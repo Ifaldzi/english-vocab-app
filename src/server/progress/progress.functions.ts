@@ -1,6 +1,6 @@
 import { createServerFn } from '@tanstack/react-start'
 
-import { authMiddleware } from './auth-middleware'
+import { authMiddleware } from '../auth/auth-middleware'
 import {
   getBadges,
   getCefrBreakdown,

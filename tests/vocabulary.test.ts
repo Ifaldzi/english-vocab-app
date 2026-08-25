@@ -5,7 +5,7 @@ import {
   getVocabularyPageWindow,
   isVocabularyLevel,
   matchesVocabularyQuery,
-} from '../src/server/vocabulary'
+} from '../src/server/vocabulary/vocabulary'
 
 describe('vocabulary search', () => {
   it('matches case-insensitive English substrings', () => {

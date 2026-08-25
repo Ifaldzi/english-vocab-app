@@ -3,8 +3,11 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { Check, RotateCcw, Star } from 'lucide-react'
 
-import { getDailyWordFn, getExtraWordFn } from '../../server/words.functions'
-import { getProgressFn } from '../../server/progress.functions'
+import {
+  getDailyWordFn,
+  getExtraWordFn,
+} from '../../server/words/words.functions'
+import { getProgressFn } from '../../server/progress/progress.functions'
 import { trackEvent } from '../../lib/analytics'
 import type { Word } from '../../lib/types'
 import { StudyModal } from '../../components/StudyModal'

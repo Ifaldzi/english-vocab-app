@@ -2,9 +2,9 @@ import { getCookie, setResponseHeader } from '@tanstack/react-start/server'
 import crypto from 'node:crypto'
 import { eq } from 'drizzle-orm'
 
-import { db } from '../db/index'
-import { sessions, users } from '../db/schema'
-import type { SessionUser } from '../lib/types'
+import { db } from '../../db/index'
+import { sessions, users } from '../../db/schema'
+import type { SessionUser } from '../../lib/types'
 
 export const SESSION_COOKIE = 'wd_session'
 const SESSION_DAYS = 30
