@@ -5,6 +5,14 @@ import { z } from 'zod'
 
 import { db } from '../../db/index'
 import { users } from '../../db/schema'
+import { clientIp } from '../client-ip'
+import {
+  isRateLimited,
+  recordAttempt,
+  LOGIN_MAX_ATTEMPTS,
+  LOGIN_IP_MAX_ATTEMPTS,
+  SIGNUP_MAX_ATTEMPTS,
+} from '../rate-limit'
 import { authMiddleware } from './auth-middleware'
 import {
   createSession,
@@ -44,6 +52,12 @@ export type AuthResult = { ok: true; username: string } | { error: string }
 export const signupFn = createServerFn({ method: 'POST' })
   .validator(signupSchema)
   .handler(async ({ data }): Promise<AuthResult> => {
+    const ip = clientIp()
+    if (isRateLimited('signup', SIGNUP_MAX_ATTEMPTS, ip)) {
+      return { error: 'Too many sign-up attempts. Please try again later.' }
+    }
+    recordAttempt('signup', ip)
+
     const usernameKey = data.username.toLowerCase()
     const existing = await db
       .select({ id: users.id })
@@ -81,6 +95,16 @@ export const loginFn = createServerFn({ method: 'POST' })
   .validator(loginSchema)
   .handler(async ({ data }): Promise<AuthResult> => {
     const usernameKey = data.username.toLowerCase()
+    const ip = clientIp()
+
+    // Per-account limit (targeted brute force) and per-IP limit (spraying).
+    if (
+      isRateLimited(`login:${usernameKey}`, LOGIN_MAX_ATTEMPTS, ip) ||
+      isRateLimited('login-ip', LOGIN_IP_MAX_ATTEMPTS, ip)
+    ) {
+      return { error: 'Too many attempts. Please try again in a few minutes.' }
+    }
+
     const user = await db
       .select()
       .from(users)
@@ -94,6 +118,8 @@ export const loginFn = createServerFn({ method: 'POST' })
     const ok = user ? await bcrypt.compare(data.password, hash) : false
 
     if (!user || !ok) {
+      recordAttempt(`login:${usernameKey}`, ip)
+      recordAttempt('login-ip', ip)
       return { error: 'Invalid username or password.' } satisfies {
         error: string
       }
