@@ -10,7 +10,9 @@ import { todayKey } from '../gamification/gamification'
 import type { Word } from '../../lib/types'
 
 /** Returns today's selected word (or null if the pool is exhausted). */
-export const getDailyWordFn = createServerFn({ method: 'GET' })
+// POST, not GET: selection records a `daily_words` row (side effect), and
+// GET-with-side-effects is a CSRF vector.
+export const getDailyWordFn = createServerFn({ method: 'POST' })
   .middleware([authMiddleware])
   .handler(async ({ context }) => {
     const result = await getDailyWordForUser(context.user.id, todayKey())
@@ -22,7 +24,8 @@ export type ExtraWordResult =
   { word: Word; status: 'shown' } | { error: string }
 
 /** Requests an additional word for today (FR-4/FR-5). Unlimited per day. */
-export const getExtraWordFn = createServerFn({ method: 'GET' })
+// POST, not GET: requesting records a `daily_words` row (side effect).
+export const getExtraWordFn = createServerFn({ method: 'POST' })
   .middleware([authMiddleware])
   .handler(async ({ context }): Promise<ExtraWordResult> => {
     const today = todayKey()

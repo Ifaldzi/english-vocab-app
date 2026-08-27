@@ -6,8 +6,17 @@ import { db } from '../../db/index'
 import { sessions, users } from '../../db/schema'
 import type { SessionUser } from '../../lib/types'
 
-export const SESSION_COOKIE = 'wd_session'
+// `__Host-` prefix (requires Secure, Path=/, no Domain) is only valid over
+// HTTPS, so it is reserved for production. Dev runs over HTTP on localhost.
+export const SESSION_COOKIE =
+  process.env.NODE_ENV === 'production' ? '__Host-wd_session' : 'wd_session'
 const SESSION_DAYS = 30
+
+function cookieFlags(): string {
+  const flags = ['HttpOnly', 'SameSite=Lax', 'Path=/']
+  if (process.env.NODE_ENV === 'production') flags.push('Secure')
+  return flags.join('; ')
+}
 
 export function readSessionToken(): string | null {
   return getCookie(SESSION_COOKIE) ?? null
@@ -16,20 +25,16 @@ export function readSessionToken(): string | null {
 export function setSessionCookie(token: string) {
   setResponseHeader(
     'Set-Cookie',
-    [
-      `${SESSION_COOKIE}=${token}`,
-      'HttpOnly',
-      'SameSite=Lax',
-      'Path=/',
-      `Max-Age=${SESSION_DAYS * 24 * 60 * 60}`,
-    ].join('; '),
+    `${SESSION_COOKIE}=${token}; ${cookieFlags()}; Max-Age=${
+      SESSION_DAYS * 24 * 60 * 60
+    }`,
   )
 }
 
 export function clearSessionCookie() {
   setResponseHeader(
     'Set-Cookie',
-    `${SESSION_COOKIE}=; HttpOnly; SameSite=Lax; Path=/; Max-Age=0`,
+    `${SESSION_COOKIE}=; ${cookieFlags()}; Max-Age=0`,
   )
 }
 

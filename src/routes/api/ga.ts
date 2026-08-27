@@ -1,5 +1,10 @@
 import { createFileRoute } from '@tanstack/react-router'
 
+import {
+  isAllowedGaEventName,
+  sanitizeGaParams,
+} from '../../server/ga-validation'
+
 interface GaBody {
   name?: unknown
   params?: unknown
@@ -8,6 +13,7 @@ interface GaBody {
 const MEASUREMENT_ID = process.env.GA4_MEASUREMENT_ID
 const API_SECRET = process.env.GA4_API_SECRET
 const CLIENT_ID = 'worddaily-anonymous'
+const MAX_BODY_BYTES = 4096
 
 export const Route = createFileRoute('/api/ga')({
   server: {
@@ -18,6 +24,11 @@ export const Route = createFileRoute('/api/ga')({
           return new Response('ok', { status: 200 })
         }
 
+        const contentLength = Number(request.headers.get('content-length') ?? 0)
+        if (contentLength > MAX_BODY_BYTES) {
+          return new Response('payload too large', { status: 413 })
+        }
+
         let body: GaBody
         try {
           body = await request.json()
@@ -25,8 +36,8 @@ export const Route = createFileRoute('/api/ga')({
           return new Response('bad json', { status: 400 })
         }
 
-        if (typeof body.name !== 'string') {
-          return new Response('missing name', { status: 400 })
+        if (!isAllowedGaEventName(body.name)) {
+          return new Response('unknown event', { status: 400 })
         }
 
         const payload = {
@@ -35,10 +46,7 @@ export const Route = createFileRoute('/api/ga')({
           events: [
             {
               name: body.name,
-              params:
-                body.params && typeof body.params === 'object'
-                  ? body.params
-                  : {},
+              params: sanitizeGaParams(body.params),
             },
           ],
         }
