@@ -4,12 +4,15 @@ import { authMiddleware } from '../auth/auth-middleware'
 import { getNextReviewQuestion, submitReviewAnswer } from './review'
 
 /** Fetches the next review question (FR-6). Returns null when the review is done. */
+const MAX_EXCLUDED_WORD_IDS = 5000
+
 export const getReviewQuestionFn = createServerFn({ method: 'GET' })
   .middleware([authMiddleware])
   .validator((input: unknown) => {
     const { excludedWordIds } = input as { excludedWordIds?: unknown }
     if (
       !Array.isArray(excludedWordIds) ||
+      excludedWordIds.length > MAX_EXCLUDED_WORD_IDS ||
       excludedWordIds.some((n) => typeof n !== 'number')
     ) {
       throw new Error('Invalid input')

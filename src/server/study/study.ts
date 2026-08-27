@@ -2,6 +2,7 @@ import { and, eq } from 'drizzle-orm'
 
 import { db } from '../../db/index'
 import { dailyWords, userWords, words } from '../../db/schema'
+import { sanitizeStoredText } from '../../lib/sanitize'
 import { displayWord } from '../../lib/word'
 import { validateSentence } from '../validation/sentence-validator.server'
 import {
@@ -75,7 +76,7 @@ export async function studyValidateSentence(input: {
         userId,
         wordId,
         memorizedAt: now,
-        userSentence: sentence.trim(),
+        userSentence: sanitizeStoredText(sentence),
         xpEarned: XP_NEW_WORD,
         reviewCount: 0,
       })

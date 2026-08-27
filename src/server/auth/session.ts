@@ -42,12 +42,17 @@ export function issueSessionToken(): string {
   return crypto.randomBytes(32).toString('base64url')
 }
 
+/** Only the SHA-256 digest of the token is stored, so a DB leak can't be replayed. */
+function hashToken(token: string): string {
+  return crypto.createHash('sha256').update(token).digest('hex')
+}
+
 export async function createSession(userId: number): Promise<string> {
   const token = issueSessionToken()
   const now = Date.now()
   await db.insert(sessions).values({
     userId,
-    token,
+    token: hashToken(token),
     expiresAt: now + SESSION_DAYS * 24 * 60 * 60 * 1000,
     createdAt: now,
   })
@@ -55,7 +60,7 @@ export async function createSession(userId: number): Promise<string> {
 }
 
 export async function revokeSession(token: string) {
-  await db.delete(sessions).where(eq(sessions.token, token)).run()
+  await db.delete(sessions).where(eq(sessions.token, hashToken(token))).run()
 }
 
 export async function revokeAllSessions(userId: number) {
@@ -74,7 +79,7 @@ export async function getSessionUserFromToken(
     })
     .from(sessions)
     .innerJoin(users, eq(sessions.userId, users.id))
-    .where(eq(sessions.token, token))
+    .where(eq(sessions.token, hashToken(token)))
     .get()
 
   if (!row) return null

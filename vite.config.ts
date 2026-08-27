@@ -7,6 +7,24 @@ import viteReact from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import { nitro } from 'nitro/vite'
 
+const isProd = process.env.NODE_ENV === 'production'
+
+// Defense-in-depth response headers. CSP stays permissive enough for the
+// inline gtag bootstrap and Tailwind inline styles; the app never renders
+// user HTML, so the residual XSS surface is small.
+const securityHeaders: Record<string, string> = {
+  'X-Content-Type-Options': 'nosniff',
+  'X-Frame-Options': 'DENY',
+  'Referrer-Policy': 'strict-origin-when-cross-origin',
+  'Permissions-Policy':
+    'camera=(), microphone=(), geolocation=(), payment=(), usb=()',
+  'Content-Security-Policy':
+    "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://www.google-analytics.com https://www.googletagmanager.com; connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com; font-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'",
+  ...(isProd
+    ? { 'Strict-Transport-Security': 'max-age=31536000; includeSubDomains' }
+    : {}),
+}
+
 const config = defineConfig({
   resolve: { tsconfigPaths: true },
   // Only expose the GA measurement ID (public by nature) to the client so the
@@ -15,7 +33,12 @@ const config = defineConfig({
   envPrefix: ['VITE_', 'GA_'],
   plugins: [
     devtools(),
-    nitro({ rollupConfig: { external: [/^@sentry\//] } }),
+    nitro({
+      rollupConfig: { external: [/^@sentry\//] },
+      routeRules: {
+        '/**': { headers: securityHeaders },
+      },
+    }),
     tailwindcss(),
     tanstackStart(),
     viteReact(),
