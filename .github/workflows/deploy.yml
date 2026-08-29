@@ -11,6 +11,11 @@ on:
   push:
     branches: ['release/**']
   workflow_dispatch:
+    inputs:
+      run_seed:
+        description: 'Seed the production database after deploy (badges + Oxford 3000 words)'
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -75,11 +80,19 @@ jobs:
       # prefixed paths (.output/) and the hidden-files opt-in is buggy. A
       # plain tarball round-trips deterministically. The migration runner and
       # the drizzle/ folder ship with the build so migrations can run on the
-      # VPS against the live DB.
+      # VPS against the live DB. seed-src/ ships the real seeder (scripts +
+      # schema + Oxford data) so it can be run on the VPS on demand.
       - name: Package build output
         run: |
           cp scripts/server-migrate.mjs .output/server/migrate.mjs
-          tar -czf build-output.tar.gz .output drizzle
+          rm -rf seed-src
+          mkdir -p seed-src/scripts seed-src/src/db seed-src/src/lib seed-src/data
+          cp scripts/seed.ts seed-src/scripts/
+          cp src/db/index.ts src/db/schema.ts src/db/seed.ts seed-src/src/db/
+          cp src/lib/types.ts seed-src/src/lib/
+          cp data/oxford_3000.json seed-src/data/
+          cp -R drizzle seed-src/drizzle
+          tar -czf build-output.tar.gz .output drizzle seed-src
       - uses: actions/upload-artifact@v4
         with:
           name: build-output
@@ -160,6 +173,26 @@ jobs:
             DATABASE_PATH="${{ secrets.VPS_PATH }}/data/worddeck.db" \
               MIGRATIONS_FOLDER="${{ secrets.VPS_PATH }}/drizzle" \
               node migrate.mjs
+          '
+
+      # Only runs when the workflow is manually dispatched with the "run_seed"
+      # toggle on; never on push-triggered deploys. Idempotent: badges upsert,
+      # words are skipped when already present.
+      - name: Seed database (manual only)
+        if: inputs.run_seed
+        run: |
+          rsync -az \
+            -e "ssh -o StrictHostKeyChecking=yes -o ConnectTimeout=15" \
+            seed-src/ \
+            "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:${{ secrets.VPS_PATH }}/seed-src/"
+          ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" '
+            set -e
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" >/dev/null 2>&1
+            nvm use default >/dev/null 2>&1 || nvm use --lts >/dev/null 2>&1 || true
+            cd "${{ secrets.VPS_PATH }}/seed-src"
+            npm install --no-save --no-package-lock better-sqlite3 drizzle-orm tsx
+            DATABASE_PATH="${{ secrets.VPS_PATH }}/data/worddeck.db" npx tsx scripts/seed.ts
           '
 
       - name: Verify server Node version
