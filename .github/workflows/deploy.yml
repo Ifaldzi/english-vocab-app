@@ -128,8 +128,14 @@ jobs:
 
       - name: Inspect server layout
         run: |
-          ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" \
-            "echo '--- ${{ secrets.VPS_PATH }}/.output ---'; ls -la '${{ secrets.VPS_PATH }}/.output' 2>&1; echo '--- server/ ---'; ls -la '${{ secrets.VPS_PATH }}/.output/server' 2>&1"
+          ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" '
+            echo "HOME: $HOME"
+            echo "--- literal tilde dir? (rsync does not expand ~) ---"
+            ls -ld "$HOME/~" 2>&1
+            echo "--- where the build files landed ---"
+            find ~ /var/www /srv /opt /root -maxdepth 6 -name index.mjs 2>/dev/null
+            echo "--- done ---"
+          '
 
       # better-sqlite3 ships native binaries; rebuild them on the VPS so the
       # prebuilt binary always matches the server's OS/arch/glibc.
