@@ -71,13 +71,15 @@ jobs:
         env:
           GA_MEASUREMENT_ID: ${{ vars.GA_MEASUREMENT_ID }}
         run: npm run build
+      # Tar the build before uploading: upload-artifact v4+ excludes dot-
+      # prefixed paths (.output/) and the hidden-files opt-in is buggy. A
+      # plain tarball round-trips deterministically.
+      - name: Package build output
+        run: tar -czf build-output.tar.gz .output
       - uses: actions/upload-artifact@v4
         with:
           name: build-output
-          path: .output/
-          # upload-artifact v4+ skips dot-prefixed paths by default; .output/
-          # is the build output (no secrets), so opt back in.
-          include-hidden-files: true
+          path: build-output.tar.gz
           if-no-files-found: error
 
   deploy:
@@ -92,7 +94,9 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: build-output
-          path: .output/
+
+      - name: Extract build output
+        run: tar -xzf build-output.tar.gz
 
       - name: Setup SSH agent
         uses: webfactory/ssh-agent@v0.9.0
@@ -104,6 +108,14 @@ jobs:
           mkdir -p ~/.ssh
           ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts
           chmod 600 ~/.ssh/known_hosts
+
+      # Guard against rsync --delete wiping the server dir if the build was
+      # ever empty (e.g. artifact/extract failure). Fail before touching VPS.
+      - name: Verify build output
+        run: |
+          test -f .output/server/index.mjs && test -d .output/public \
+            && echo "build output OK" \
+            || (echo "::error::.output is missing build files" && exit 1)
 
       - name: Copy build to VPS
         run: |
