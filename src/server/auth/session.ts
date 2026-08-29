@@ -60,7 +60,10 @@ export async function createSession(userId: number): Promise<string> {
 }
 
 export async function revokeSession(token: string) {
-  await db.delete(sessions).where(eq(sessions.token, hashToken(token))).run()
+  await db
+    .delete(sessions)
+    .where(eq(sessions.token, hashToken(token)))
+    .run()
 }
 
 export async function revokeAllSessions(userId: number) {

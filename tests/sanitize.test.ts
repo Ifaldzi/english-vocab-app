@@ -9,17 +9,11 @@ describe('sanitizeStoredText', () => {
   })
 
   it('collapses internal whitespace runs', () => {
-    assert.equal(
-      sanitizeStoredText('hello\n\t  world'),
-      'hello world',
-    )
+    assert.equal(sanitizeStoredText('hello\n\t  world'), 'hello world')
   })
 
   it('strips control characters', () => {
-    assert.equal(
-      sanitizeStoredText('a\u0000b\u0007c\u001Fd\u007Fe'),
-      'abcde',
-    )
+    assert.equal(sanitizeStoredText('a\u0000b\u0007c\u001Fd\u007Fe'), 'abcde')
   })
 
   it('keeps normal punctuation intact', () => {

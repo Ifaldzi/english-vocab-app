@@ -12,13 +12,7 @@ import type {
 } from '../../lib/types'
 import { getVocabularyFn } from '../../server/vocabulary/vocabulary.functions'
 
-const FILTER_LEVELS: VocabularyFilterLevel[] = [
-  'all',
-  'A1',
-  'A2',
-  'B1',
-  'B2',
-]
+const FILTER_LEVELS: VocabularyFilterLevel[] = ['all', 'A1', 'A2', 'B1', 'B2']
 const SEARCH_DEBOUNCE_MS = 300
 
 export const Route = createFileRoute('/_authenticated/vocabularies')({

@@ -111,10 +111,5 @@ export async function getVocabularyPage(
 }
 
 export function isVocabularyLevel(value: unknown): value is Level {
-  return (
-    value === 'A1' ||
-    value === 'A2' ||
-    value === 'B1' ||
-    value === 'B2'
-  )
+  return value === 'A1' || value === 'A2' || value === 'B1' || value === 'B2'
 }
