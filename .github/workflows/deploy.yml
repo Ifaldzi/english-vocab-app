@@ -1,0 +1,142 @@
+name: Deploy to VPS
+
+# Runs whenever the `release` branch is pushed. This is the branch-based
+# deploy strategy: only code merged onto `release` is test -> build -> deploy,
+# and a semver tag is created only after a successful deploy so every live
+# version is point-in-time recoverable via `git checkout <tag>`.
+on:
+  push:
+    branches: [release]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+# Serialize deploys: two pushes to `release` must not race (deploy + tag must
+# be sequential). Never cancel an in-flight deploy.
+concurrency:
+  group: deploy-release
+  cancel-in-progress: false
+
+env:
+  NODE_VERSION: 22
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+      - run: npm run test
+      - run: npm run lint
+      - run: npm run check
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+      # GA_MEASUREMENT_ID is public by nature and inlined into the client
+      # bundle at build time. Optional: set it as a repo variable to enable
+      # client-side gtag tracking.
+      - name: Build
+        env:
+          GA_MEASUREMENT_ID: ${{ vars.GA_MEASUREMENT_ID }}
+        run: npm run build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: build-output
+          path: .output/
+          if-no-files-found: error
+
+  deploy:
+    name: Deploy to VPS
+    runs-on: ubuntu-latest
+    needs: build
+    environment: production
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: build-output
+          path: .output/
+
+      - name: Setup SSH agent
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.VPS_SSH_KEY }}
+
+      - name: Add VPS host key
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+
+      - name: Copy build to VPS
+        run: |
+          rsync -az --delete \
+            --exclude 'server/node_modules' \
+            -e "ssh -o StrictHostKeyChecking=yes -o ConnectTimeout=15" \
+            .output/ \
+            "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:${{ secrets.VPS_PATH }}/.output/"
+
+      # better-sqlite3 ships native binaries; rebuild them on the VPS so the
+      # prebuilt binary always matches the server's OS/arch/glibc.
+      - name: Install native dependencies on VPS
+        run: |
+          ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" \
+            "cd '${{ secrets.VPS_PATH }}/.output/server' && npm install --omit=dev"
+
+      - name: Reload app
+        run: |
+          ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" \
+            "pm2 reload '${{ vars.VPS_APP_NAME }}' || pm2 restart '${{ vars.VPS_APP_NAME }}'"
+
+      - name: Health check
+        run: |
+          ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" \
+            "sleep 3 && curl -fsS -o /dev/null --max-time 15 http://127.0.0.1:${{ vars.APP_PORT }}/ && echo HEALTH_OK"
+
+  tag:
+    name: Tag release
+    runs-on: ubuntu-latest
+    needs: deploy
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - name: Compute next version
+        id: version
+        run: |
+          latest=$(git tag -l 'v*' | sort -V | tail -n 1 || true)
+          if [ -z "$latest" ]; then
+            echo "next=v0.1.0" >> "$GITHUB_OUTPUT"
+          else
+            ver=${latest#v}
+            major=${ver%%.*}
+            minor=${ver#*.}; minor=${minor%%.*}
+            patch=${ver##*.}
+            patch=$((10#$patch + 1))
+            echo "next=v$major.$minor.$patch" >> "$GITHUB_OUTPUT"
+          fi
+          echo "Next version: ${{ steps.version.outputs.next }}"
+
+      - name: Create and push tag
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git remote set-url origin "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
+          git tag -a "${{ steps.version.outputs.next }}" -m "Release ${{ steps.version.outputs.next }}"
+          git push origin "${{ steps.version.outputs.next }}"
