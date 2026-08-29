@@ -144,10 +144,22 @@ jobs:
           ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" \
             "cd '${{ secrets.VPS_PATH }}/.output/server' && npm install --omit=dev"
 
-      - name: Reload app
+      - name: Start or reload app
         run: |
-          ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" \
-            "pm2 reload '${{ vars.VPS_APP_NAME }}' || pm2 restart '${{ vars.VPS_APP_NAME }}'"
+          ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" '
+            set -e
+            cd "${{ secrets.VPS_PATH }}" || exit 1
+            if pm2 describe "${{ vars.VPS_APP_NAME }}" >/dev/null 2>&1; then
+              pm2 reload "${{ vars.VPS_APP_NAME }}" || pm2 restart "${{ vars.VPS_APP_NAME }}"
+            else
+              if [ -f "${{ secrets.VPS_PATH }}/.env" ]; then
+                pm2 start .output/server/index.mjs --name "${{ vars.VPS_APP_NAME }}" --node-args="--env-file=${{ secrets.VPS_PATH }}/.env"
+              else
+                pm2 start .output/server/index.mjs --name "${{ vars.VPS_APP_NAME }}"
+              fi
+              pm2 save
+            fi
+          '
 
       - name: Health check
         run: |
