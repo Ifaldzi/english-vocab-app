@@ -119,11 +119,17 @@ jobs:
 
       - name: Copy build to VPS
         run: |
-          rsync -az --delete \
+          DEST="${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:${{ secrets.VPS_PATH }}/.output/"
+          echo "Rsync destination: $DEST"
+          rsync -azvh --delete --stats \
             --exclude 'server/node_modules' \
             -e "ssh -o StrictHostKeyChecking=yes -o ConnectTimeout=15" \
-            .output/ \
-            "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:${{ secrets.VPS_PATH }}/.output/"
+            .output/ "$DEST"
+
+      - name: Inspect server layout
+        run: |
+          ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" \
+            "echo '--- ${{ secrets.VPS_PATH }}/.output ---'; ls -la '${{ secrets.VPS_PATH }}/.output' 2>&1; echo '--- server/ ---'; ls -la '${{ secrets.VPS_PATH }}/.output/server' 2>&1"
 
       # better-sqlite3 ships native binaries; rebuild them on the VPS so the
       # prebuilt binary always matches the server's OS/arch/glibc.
