@@ -141,16 +141,23 @@ jobs:
       # prebuilt binary always matches the server's OS/arch/glibc.
       - name: Install native dependencies on VPS
         run: |
-          ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" \
-            "cd '${{ secrets.VPS_PATH }}/.output/server' && npm install --omit=dev"
+          ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" '
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" >/dev/null 2>&1
+            nvm use default >/dev/null 2>&1 || nvm use --lts >/dev/null 2>&1 || true
+            cd "${{ secrets.VPS_PATH }}/.output/server" && npm install --omit=dev
+          '
 
       - name: Verify server Node version
         run: |
           ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" '
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" >/dev/null 2>&1
+            nvm use default >/dev/null 2>&1 || nvm use --lts >/dev/null 2>&1 || true
             echo "Server node: $(node --version)"
             major=$(node -p "Number(process.versions.node.split(\".\")[0])")
             if [ "$major" -lt 22 ]; then
-              echo "::error::Server Node must be >= 22 (found $major). Install Node 22 LTS and restart the PM2 daemon."
+              echo "::error::Server Node must be >= 22 (found $major). Set the nvm default to Node 22 LTS."
               exit 1
             fi
           '
@@ -159,6 +166,9 @@ jobs:
         run: |
           ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" '
             set -e
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" >/dev/null 2>&1
+            nvm use default >/dev/null 2>&1 || nvm use --lts >/dev/null 2>&1 || true
             cd "${{ secrets.VPS_PATH }}" || exit 1
             if pm2 describe "${{ vars.VPS_APP_NAME }}" >/dev/null 2>&1; then
               pm2 reload "${{ vars.VPS_APP_NAME }}" || pm2 restart "${{ vars.VPS_APP_NAME }}"
