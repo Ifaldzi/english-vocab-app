@@ -220,6 +220,11 @@ jobs:
             cd "${{ secrets.VPS_PATH }}" || exit 1
             mkdir -p data
             export DATABASE_PATH="$PWD/data/worddeck.db"
+            if [ -n "${{ secrets.GEMINI_API_KEY }}" ]; then
+              export GEMINI_API_KEY="${{ secrets.GEMINI_API_KEY }}"
+              export SENTENCE_VALIDATOR=ai
+              export GEMINI_MODEL="${{ vars.GEMINI_MODEL || 'gemini-3.5-flash-lite' }}"
+            fi
             if pm2 describe "${{ vars.VPS_APP_NAME }}" >/dev/null 2>&1; then
               pm2 reload "${{ vars.VPS_APP_NAME }}" --update-env || pm2 restart "${{ vars.VPS_APP_NAME }}" --update-env
             else
