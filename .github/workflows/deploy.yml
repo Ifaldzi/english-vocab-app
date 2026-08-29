@@ -169,9 +169,10 @@ jobs:
             export NVM_DIR="$HOME/.nvm"
             [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" >/dev/null 2>&1
             nvm use default >/dev/null 2>&1 || nvm use --lts >/dev/null 2>&1 || true
+            export PORT="${{ vars.APP_PORT || 3000 }}"
             cd "${{ secrets.VPS_PATH }}" || exit 1
             if pm2 describe "${{ vars.VPS_APP_NAME }}" >/dev/null 2>&1; then
-              pm2 reload "${{ vars.VPS_APP_NAME }}" || pm2 restart "${{ vars.VPS_APP_NAME }}"
+              pm2 reload "${{ vars.VPS_APP_NAME }}" --update-env || pm2 restart "${{ vars.VPS_APP_NAME }}" --update-env
             else
               if [ -f "${{ secrets.VPS_PATH }}/.env" ]; then
                 pm2 start .output/server/index.mjs --name "${{ vars.VPS_APP_NAME }}" --node-args="--env-file=${{ secrets.VPS_PATH }}/.env"
@@ -185,7 +186,7 @@ jobs:
       - name: Health check
         run: |
           ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" \
-            "sleep 3 && curl -fsS -o /dev/null --max-time 15 http://127.0.0.1:${{ vars.APP_PORT }}/ && echo HEALTH_OK"
+            "sleep 3 && curl -fsS -o /dev/null --max-time 15 http://127.0.0.1:${{ vars.APP_PORT || 3000 }}/ && echo HEALTH_OK"
 
   tag:
     name: Tag release
