@@ -136,12 +136,11 @@ jobs:
 
       - name: Copy build to VPS
         run: |
-          DEST="${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:${{ secrets.VPS_PATH }}/.output/"
-          echo "Rsync destination: $DEST"
-          rsync -azvh --delete --stats \
+          rsync -az --delete \
             --exclude 'server/node_modules' \
             -e "ssh -o StrictHostKeyChecking=yes -o ConnectTimeout=15" \
-            .output/ "$DEST"
+            .output/ \
+            "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:${{ secrets.VPS_PATH }}/.output/"
 
       - name: Copy migrations to VPS
         run: |
