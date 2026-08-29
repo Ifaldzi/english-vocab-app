@@ -144,6 +144,17 @@ jobs:
           ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" \
             "cd '${{ secrets.VPS_PATH }}/.output/server' && npm install --omit=dev"
 
+      - name: Verify server Node version
+        run: |
+          ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" '
+            echo "Server node: $(node --version)"
+            major=$(node -p "Number(process.versions.node.split(\".\")[0])")
+            if [ "$major" -lt 22 ]; then
+              echo "::error::Server Node must be >= 22 (found $major). Install Node 22 LTS and restart the PM2 daemon."
+              exit 1
+            fi
+          '
+
       - name: Start or reload app
         run: |
           ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" '
