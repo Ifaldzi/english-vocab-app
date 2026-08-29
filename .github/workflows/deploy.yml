@@ -73,9 +73,13 @@ jobs:
         run: npm run build
       # Tar the build before uploading: upload-artifact v4+ excludes dot-
       # prefixed paths (.output/) and the hidden-files opt-in is buggy. A
-      # plain tarball round-trips deterministically.
+      # plain tarball round-trips deterministically. The migration runner and
+      # the drizzle/ folder ship with the build so migrations can run on the
+      # VPS against the live DB.
       - name: Package build output
-        run: tar -czf build-output.tar.gz .output
+        run: |
+          cp scripts/server-migrate.mjs .output/server/migrate.mjs
+          tar -czf build-output.tar.gz .output drizzle
       - uses: actions/upload-artifact@v4
         with:
           name: build-output
@@ -126,26 +130,36 @@ jobs:
             -e "ssh -o StrictHostKeyChecking=yes -o ConnectTimeout=15" \
             .output/ "$DEST"
 
-      - name: Inspect server layout
+      - name: Copy migrations to VPS
         run: |
-          ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" '
-            echo "HOME: $HOME"
-            echo "--- literal tilde dir? (rsync does not expand ~) ---"
-            ls -ld "$HOME/~" 2>&1
-            echo "--- where the build files landed ---"
-            find ~ /var/www /srv /opt /root -maxdepth 6 -name index.mjs 2>/dev/null
-            echo "--- done ---"
-          '
+          rsync -az \
+            -e "ssh -o StrictHostKeyChecking=yes -o ConnectTimeout=15" \
+            drizzle/ \
+            "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:${{ secrets.VPS_PATH }}/drizzle/"
 
       # better-sqlite3 ships native binaries; rebuild them on the VPS so the
-      # prebuilt binary always matches the server's OS/arch/glibc.
+      # prebuilt binary always matches the server's OS/arch/glibc. drizzle-orm
+      # is added so the migration runner can run against the live DB.
       - name: Install native dependencies on VPS
         run: |
           ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" '
             export NVM_DIR="$HOME/.nvm"
             [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" >/dev/null 2>&1
             nvm use default >/dev/null 2>&1 || nvm use --lts >/dev/null 2>&1 || true
-            cd "${{ secrets.VPS_PATH }}/.output/server" && npm install --omit=dev
+            cd "${{ secrets.VPS_PATH }}/.output/server" && npm install --omit=dev drizzle-orm
+          '
+
+      - name: Run database migrations
+        run: |
+          ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" '
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" >/dev/null 2>&1
+            nvm use default >/dev/null 2>&1 || nvm use --lts >/dev/null 2>&1 || true
+            mkdir -p "${{ secrets.VPS_PATH }}/data"
+            cd "${{ secrets.VPS_PATH }}/.output/server"
+            DATABASE_PATH="${{ secrets.VPS_PATH }}/data/worddeck.db" \
+              MIGRATIONS_FOLDER="${{ secrets.VPS_PATH }}/drizzle" \
+              node migrate.mjs
           '
 
       - name: Verify server Node version
@@ -171,6 +185,8 @@ jobs:
             nvm use default >/dev/null 2>&1 || nvm use --lts >/dev/null 2>&1 || true
             export PORT="${{ vars.APP_PORT || 3000 }}"
             cd "${{ secrets.VPS_PATH }}" || exit 1
+            mkdir -p data
+            export DATABASE_PATH="$PWD/data/worddeck.db"
             if pm2 describe "${{ vars.VPS_APP_NAME }}" >/dev/null 2>&1; then
               pm2 reload "${{ vars.VPS_APP_NAME }}" --update-env || pm2 restart "${{ vars.VPS_APP_NAME }}" --update-env
             else
