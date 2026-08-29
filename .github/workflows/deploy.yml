@@ -75,6 +75,9 @@ jobs:
         with:
           name: build-output
           path: .output/
+          # upload-artifact v4+ skips dot-prefixed paths by default; .output/
+          # is the build output (no secrets), so opt back in.
+          include-hidden-files: true
           if-no-files-found: error
 
   deploy:
