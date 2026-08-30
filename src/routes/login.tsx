@@ -66,7 +66,22 @@ function LoginPage() {
     <div className="auth-wrap">
       <ThemeToggle />
       <div className="auth-card">
-        <div className="auth-logo">WD</div>
+        <div className="auth-logo">
+          <img
+            className="logo-dark"
+            src="/logo-dark.png"
+            alt="WordDeck logo"
+            width={46}
+            height={46}
+          />
+          <img
+            className="logo-light"
+            src="/logo-light.png"
+            alt="WordDeck logo"
+            width={46}
+            height={46}
+          />
+        </div>
         <h1>WordDeck</h1>
         <p className="sub">
           Gather &amp; memorize English vocabulary, one word a day.

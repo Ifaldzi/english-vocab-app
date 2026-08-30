@@ -736,14 +736,16 @@ h2.section {
   width: 46px;
   height: 46px;
   border-radius: 12px;
-  background: var(--accent);
-  color: var(--accent-text);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 800;
-  font-size: 16px;
   margin-bottom: 16px;
+}
+.auth-card .auth-logo img {
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  object-fit: cover;
 }
 .auth-card h1 {
   font-size: 24px;
@@ -1341,17 +1343,11 @@ h2.section {
     padding: 0 8px 20px;
     text-transform: uppercase;
   }
-  .sidebar-brand .logo {
+  .sidebar-brand .logo-img {
     width: 36px;
     height: 36px;
     border-radius: 10px;
-    background: var(--accent);
-    color: var(--accent-text);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 13px;
-    font-weight: 800;
+    display: block;
   }
   .side-nav {
     display: flex;
@@ -1617,6 +1613,20 @@ h2.section {
   .stats {
     grid-template-columns: repeat(3, 1fr);
   }
+}
+
+/* Brand logo: the dark variant is the dark-theme default. */
+.logo-dark {
+  display: block;
+}
+.logo-light {
+  display: none;
+}
+html[data-theme='light'] .logo-dark {
+  display: none;
+}
+html[data-theme='light'] .logo-light {
+  display: block;
 }
 
 /* Theme switch: dark is the reference palette; light keeps its lemon accent. */

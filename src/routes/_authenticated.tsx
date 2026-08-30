@@ -70,7 +70,20 @@ function AuthenticatedLayout() {
     <div className="app">
       <aside className="sidebar">
         <div className="sidebar-brand">
-          <span className="logo">WD</span>
+          <img
+            className="logo-img logo-dark"
+            src="/logo-dark.png"
+            alt="WordDeck logo"
+            width={36}
+            height={36}
+          />
+          <img
+            className="logo-img logo-light"
+            src="/logo-light.png"
+            alt="WordDeck logo"
+            width={36}
+            height={36}
+          />
           <span>WordDeck</span>
         </div>
         <nav className="side-nav">

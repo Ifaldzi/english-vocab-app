@@ -66,7 +66,22 @@ function SignupPage() {
     <div className="auth-wrap">
       <ThemeToggle />
       <div className="auth-card">
-        <div className="auth-logo">WD</div>
+        <div className="auth-logo">
+          <img
+            className="logo-dark"
+            src="/logo-dark.png"
+            alt="WordDeck logo"
+            width={46}
+            height={46}
+          />
+          <img
+            className="logo-light"
+            src="/logo-light.png"
+            alt="WordDeck logo"
+            width={46}
+            height={46}
+          />
+        </div>
         <h1>Create your account</h1>
         <p className="sub">
           Start building your vocabulary habit, one word a day.
