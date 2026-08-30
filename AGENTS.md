@@ -43,6 +43,7 @@ TanStack Start + TanStack Router, React 19, TypeScript, Tailwind CSS 4, TanStack
 npm run dev          # Start dev server
 npm run build        # Production build
 npm run test         # Run unit tests (tsx --test)
+npm run check        # Check formatting (prettier --check)
 npx drizzle-kit push # Push schema to DB
 npx drizzle-kit studio # Open Drizzle Studio
 ```
@@ -51,6 +52,7 @@ npx drizzle-kit studio # Open Drizzle Studio
 
 - **Commit Messages**: Always use [Conventional Commits](https://www.conventionalcommits.org/) format: `type(scope): subject` (e.g., `feat(auth): add login flow`, `fix(review): correct score calculation`). Types: `feat`, `fix`, `refactor`, `chore`, `docs`, `test`, `style`, `perf`.
 - **Commit After Every Change**: After finishing any work — feature implementation, bug fixes, or refactoring — commit the changes. Do **not** push to the remote branch until the user explicitly gives approval to push.
+- **Pre-Commit Checks**: Before committing, run `npm run check`, `npm run lint`, and `npm run test`; fix any failures first. Run `npx prettier --write <file>` to fix formatting issues reported by `npm run check`.
 
 <!-- intent-skills:start -->
 
