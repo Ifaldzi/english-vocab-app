@@ -7,22 +7,35 @@ export function getTheme(): 'dark' | 'light' {
   return document.documentElement.dataset.theme === 'light' ? 'light' : 'dark'
 }
 
-function readStoredTheme(): 'dark' | 'light' {
+/** Only a stored value counts as an explicit user choice. */
+function readStoredTheme(): 'dark' | 'light' | null {
   try {
-    return window.localStorage.getItem(STORAGE_KEY) === 'light'
-      ? 'light'
-      : 'dark'
+    const stored = window.localStorage.getItem(STORAGE_KEY)
+    return stored === 'light' || stored === 'dark' ? stored : null
   } catch {
-    return 'dark'
+    return null
   }
 }
 
-function applyTheme(theme: 'dark' | 'light') {
+function systemTheme(): 'dark' | 'light' {
+  return window.matchMedia('(prefers-color-scheme: light)').matches
+    ? 'light'
+    : 'dark'
+}
+
+/** Follow the user's saved choice; otherwise fall back to the system theme. */
+export function resolveTheme(): 'dark' | 'light' {
+  return readStoredTheme() ?? systemTheme()
+}
+
+function applyTheme(theme: 'dark' | 'light', persist: boolean) {
   document.documentElement.dataset.theme = theme
-  try {
-    window.localStorage.setItem(STORAGE_KEY, theme)
-  } catch {
-    // ignore quota / privacy-mode errors
+  if (persist) {
+    try {
+      window.localStorage.setItem(STORAGE_KEY, theme)
+    } catch {
+      // ignore quota / privacy-mode errors
+    }
   }
 }
 
@@ -30,14 +43,13 @@ export function ThemeToggle() {
   const [theme, setTheme] = useState<'dark' | 'light'>('dark')
 
   useEffect(() => {
-    setTheme(readStoredTheme())
-    applyTheme(readStoredTheme())
+    setTheme(resolveTheme())
   }, [])
 
   const toggle = () => {
     const next = theme === 'dark' ? 'light' : 'dark'
     setTheme(next)
-    applyTheme(next)
+    applyTheme(next, true)
   }
 
   const isLight = theme === 'light'

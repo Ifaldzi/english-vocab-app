@@ -53,20 +53,25 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
           href: appCss,
         },
       ],
-      scripts: gaId
-        ? [
-            {
-              src: `https://www.googletagmanager.com/gtag/js?id=${gaId}`,
-              async: true,
-            },
-            {
-              children: `window.dataLayer = window.dataLayer || [];
+      scripts: [
+        {
+          children: `try{var t=localStorage.getItem('worddeck-theme');if(t!=='light'&&t!=='dark'){t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'}document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme='dark'}`,
+        },
+        ...(gaId
+          ? [
+              {
+                src: `https://www.googletagmanager.com/gtag/js?id=${gaId}`,
+                async: true,
+              },
+              {
+                children: `window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', '${gaId}', { send_page_view: false });`,
-            },
-          ]
-        : [],
+              },
+            ]
+          : []),
+      ],
     }
   },
   shellComponent: RootDocument,
