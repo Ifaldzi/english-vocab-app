@@ -803,12 +803,18 @@ h2.section {
 
 /* Bottom nav */
 .nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 40;
   display: flex;
   background: #0f0f0f;
   border-top: 1px solid #262626;
   border-radius: 16px 16px 0 0;
   overflow: hidden;
   margin-top: 20px;
+  padding-bottom: env(safe-area-inset-bottom);
 }
 .nav a,
 .nav button {
@@ -1556,6 +1562,12 @@ h2.section {
   }
   main {
     padding: 20px 28px 48px;
+  }
+}
+
+@media (max-width: 1023px) {
+  main {
+    padding-bottom: 88px;
   }
 }
 
