@@ -139,7 +139,9 @@ export function isVocabularyLevel(value: unknown): value is Level {
   return value === 'A1' || value === 'A2' || value === 'B1' || value === 'B2'
 }
 
-export function isVocabularyKind(value: unknown): value is VocabularyFilterKind {
+export function isVocabularyKind(
+  value: unknown,
+): value is VocabularyFilterKind {
   return VOCABULARY_KINDS.includes(value as VocabularyFilterKind)
 }
 

@@ -392,9 +392,7 @@ function isVocabularyFilterLevel(
   return FILTER_LEVELS.includes(value as VocabularyFilterLevel)
 }
 
-function isVocabularyFilterKind(
-  value: unknown,
-): value is VocabularyFilterKind {
+function isVocabularyFilterKind(value: unknown): value is VocabularyFilterKind {
   return FILTER_KINDS.some((kind) => kind.value === value)
 }
 
