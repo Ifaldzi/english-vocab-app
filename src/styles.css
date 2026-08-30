@@ -1640,15 +1640,13 @@ html[data-theme='light'] .logo-light {
 .theme-toggle {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  justify-content: center;
   border: 1px solid #404040;
   border-radius: 999px;
   background: transparent;
   color: #a3a3a3;
-  padding: 6px 11px;
+  padding: 8px;
   font: inherit;
-  font-size: 12px;
-  font-weight: 700;
   cursor: pointer;
   white-space: nowrap;
 }

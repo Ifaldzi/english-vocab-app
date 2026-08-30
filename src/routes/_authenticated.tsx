@@ -7,7 +7,7 @@ import {
   useLocation,
 } from '@tanstack/react-router'
 import { useQuery } from '@tanstack/react-query'
-import { Home, RotateCcw, BarChart3, LogOut } from 'lucide-react'
+import { Home, RotateCcw, BarChart3, LogOut, Flame } from 'lucide-react'
 
 import { getProgressFn } from '../server/progress/progress.functions'
 import { logoutFn } from '../server/auth/auth.functions'
@@ -160,7 +160,13 @@ function AuthenticatedLayout() {
             <span className="spacer" />
             <ThemeToggle />
             {isHome && stats ? (
-              <span className="pill streak">{stats.streak}-day streak</span>
+              <span
+                className="pill streak"
+                title={`${stats.streak}-day streak`}
+              >
+                <Flame size={14} />
+                {stats.streak}
+              </span>
             ) : isReview ? (
               <span className="pill">{memorized} words to review</span>
             ) : (

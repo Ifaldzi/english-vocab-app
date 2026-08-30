@@ -51,8 +51,7 @@ export function ThemeToggle() {
       aria-label={`Switch to ${label.toLowerCase()}`}
       title={label}
     >
-      {isLight ? <Moon size={14} /> : <Sun size={14} />}
-      <span>{label}</span>
+      {isLight ? <Moon size={16} /> : <Sun size={16} />}
     </button>
   )
 }
