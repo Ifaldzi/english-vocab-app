@@ -3,7 +3,9 @@ import assert from 'node:assert/strict'
 
 import {
   getVocabularyPageWindow,
+  isVocabularyKind,
   isVocabularyLevel,
+  matchesVocabularyKind,
   matchesVocabularyQuery,
 } from '../src/server/vocabulary/vocabulary'
 
@@ -26,6 +28,33 @@ describe('vocabulary levels', () => {
     assert.equal(isVocabularyLevel('A1'), true)
     assert.equal(isVocabularyLevel('C1'), false)
     assert.equal(isVocabularyLevel('C2'), false)
+  })
+})
+
+describe('vocabulary kinds', () => {
+  it('accepts supported primary kinds and rejects unknown ones', () => {
+    assert.equal(isVocabularyKind('n.'), true)
+    assert.equal(isVocabularyKind('modal v.'), true)
+    assert.equal(isVocabularyKind('all'), false)
+    assert.equal(isVocabularyKind('article'), false)
+    assert.equal(isVocabularyKind('garbage'), false)
+  })
+
+  it('matches a single primary kind exactly', () => {
+    assert.equal(matchesVocabularyKind('n.', 'n.'), true)
+    assert.equal(matchesVocabularyKind('v.', 'n.'), false)
+  })
+
+  it('matches a kind stored before a comma or slash separator', () => {
+    assert.equal(matchesVocabularyKind('n., v.', 'n.'), true)
+    assert.equal(matchesVocabularyKind('det./pron.', 'det.'), true)
+    assert.equal(matchesVocabularyKind('v., n.', 'v.'), true)
+  })
+
+  it('does not match a secondary kind or a different primary', () => {
+    assert.equal(matchesVocabularyKind('n., v.', 'v.'), false)
+    assert.equal(matchesVocabularyKind('adj./n.', 'n.'), false)
+    assert.equal(matchesVocabularyKind('modal v.', 'v.'), false)
   })
 })
 

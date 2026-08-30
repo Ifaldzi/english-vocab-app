@@ -6,6 +6,7 @@ import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import { StudyModal } from '../../components/StudyModal'
 import { displayWord } from '../../lib/word'
 import type {
+  VocabularyFilterKind,
   VocabularyFilterLevel,
   VocabularyItem,
   Word,
@@ -13,12 +14,26 @@ import type {
 import { getVocabularyFn } from '../../server/vocabulary/vocabulary.functions'
 
 const FILTER_LEVELS: VocabularyFilterLevel[] = ['all', 'A1', 'A2', 'B1', 'B2']
+const FILTER_KINDS: { value: VocabularyFilterKind; label: string }[] = [
+  { value: 'n.', label: 'Noun' },
+  { value: 'v.', label: 'Verb' },
+  { value: 'adj.', label: 'Adjective' },
+  { value: 'adv.', label: 'Adverb' },
+  { value: 'pron.', label: 'Pronoun' },
+  { value: 'prep.', label: 'Preposition' },
+  { value: 'conj.', label: 'Conjunction' },
+  { value: 'det.', label: 'Determiner' },
+  { value: 'exclam.', label: 'Exclamation' },
+  { value: 'number', label: 'Number' },
+  { value: 'modal v.', label: 'Modal verb' },
+]
 const SEARCH_DEBOUNCE_MS = 300
 
 export const Route = createFileRoute('/_authenticated/vocabularies')({
   validateSearch: (search: Record<string, unknown>) => ({
     q: typeof search.q === 'string' ? search.q.slice(0, 100) : '',
     level: isVocabularyFilterLevel(search.level) ? search.level : 'all',
+    kind: isVocabularyFilterKind(search.kind) ? search.kind : 'all',
     page: parsePage(search.page),
   }),
   component: VocabulariesPage,
@@ -33,12 +48,13 @@ function VocabulariesPage() {
   const [queryInput, setQueryInput] = useState(search.q)
 
   const { data, isFetching, isLoading } = useQuery({
-    queryKey: ['vocabulary', search.q, search.level, search.page],
+    queryKey: ['vocabulary', search.q, search.level, search.kind, search.page],
     queryFn: () =>
       getVocabularyFn({
         data: {
           query: search.q,
           level: search.level,
+          kind: search.kind,
           page: search.page,
         },
       }),
@@ -96,6 +112,16 @@ function VocabulariesPage() {
     })
   }
 
+  const updateKind = (kind: VocabularyFilterKind) => {
+    navigate({
+      search: (previous) => ({
+        ...previous,
+        kind,
+        page: 1,
+      }),
+    })
+  }
+
   const goToPage = (page: number) => {
     navigate({ search: (previous) => ({ ...previous, page }) })
   }
@@ -147,6 +173,22 @@ function VocabulariesPage() {
               {FILTER_LEVELS.map((level) => (
                 <option value={level} key={level}>
                   {level === 'all' ? 'All levels' : level}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label>
+            <span className="sr-only">Filter by part of speech</span>
+            <select
+              value={search.kind}
+              onChange={(event) =>
+                updateKind(event.target.value as VocabularyFilterKind)
+              }
+            >
+              <option value="all">All kinds</option>
+              {FILTER_KINDS.map((kind) => (
+                <option value={kind.value} key={kind.value}>
+                  {kind.label}
                 </option>
               ))}
             </select>
@@ -348,6 +390,12 @@ function isVocabularyFilterLevel(
   value: unknown,
 ): value is VocabularyFilterLevel {
   return FILTER_LEVELS.includes(value as VocabularyFilterLevel)
+}
+
+function isVocabularyFilterKind(
+  value: unknown,
+): value is VocabularyFilterKind {
+  return FILTER_KINDS.some((kind) => kind.value === value)
 }
 
 function parsePage(value: unknown): number {

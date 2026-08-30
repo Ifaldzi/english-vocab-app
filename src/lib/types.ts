@@ -2,6 +2,21 @@ export type Level = 'A1' | 'A2' | 'B1' | 'B2'
 export type ProgressLevel = Level
 export type VocabularyFilterLevel = 'all' | Level
 
+/** Primary parts of speech present in the Oxford seed (first token of `words.kind`). */
+export type VocabularyFilterKind =
+  | 'all'
+  | 'n.'
+  | 'v.'
+  | 'adj.'
+  | 'adv.'
+  | 'pron.'
+  | 'prep.'
+  | 'conj.'
+  | 'det.'
+  | 'exclam.'
+  | 'number'
+  | 'modal v.'
+
 export interface SessionUser {
   id: number
   username: string
