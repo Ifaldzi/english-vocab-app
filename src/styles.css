@@ -1347,7 +1347,6 @@ h2.section {
     width: 36px;
     height: 36px;
     border-radius: 10px;
-    display: block;
   }
   .side-nav {
     display: flex;
