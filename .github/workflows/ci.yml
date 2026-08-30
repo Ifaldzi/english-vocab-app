@@ -1,0 +1,27 @@
+name: CI
+
+# Runs on every push to `main` and on pull requests targeting `main`.
+# Only checks the code (tests, lint, formatting) — no build or deploy.
+on:
+  push:
+    branches: ['main']
+  pull_request:
+    branches: ['main']
+
+env:
+  NODE_VERSION: 22
+
+jobs:
+  check:
+    name: Test, lint & format check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+      - run: npm run test
+      - run: npm run lint
+      - run: npm run check
