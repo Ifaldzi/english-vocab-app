@@ -50,10 +50,18 @@ a {
   flex: 1;
 }
 .brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   font-weight: 800;
   font-size: 18px;
   letter-spacing: 0.5px;
   text-transform: uppercase;
+}
+.brand img {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
 }
 .brand small {
   font-weight: 600;

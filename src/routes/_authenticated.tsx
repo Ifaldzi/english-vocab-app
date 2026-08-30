@@ -139,7 +139,23 @@ function AuthenticatedLayout() {
       <div className="page">
         <div className="topbar">
           <div className="row">
-            <span className="brand">WordDeck</span>
+            <span className="brand">
+              <img
+                className="logo-dark"
+                src="/logo-dark.png"
+                alt="WordDeck logo"
+                width={22}
+                height={22}
+              />
+              <img
+                className="logo-light"
+                src="/logo-light.png"
+                alt="WordDeck logo"
+                width={22}
+                height={22}
+              />
+              WordDeck
+            </span>
             <span className="top-title">{topTitle}</span>
             <span className="spacer" />
             <ThemeToggle />
