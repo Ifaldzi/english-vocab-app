@@ -1,4 +1,4 @@
-# WordDeck
+# Vocab Deck
 
 English vocabulary learning app for Indonesian speakers. Features daily "Word of the Day" with flip-card UI, sentence validation, review mode (MCQ quiz), and gamification (XP, levels, streaks, badges). Uses Oxford 3000 word list (3,306 words) with CEFR labels and Indonesian translations.
 

@@ -107,7 +107,7 @@ export function StudyModal({
       ? study.kind === 'extra'
         ? 'Extra Word'
         : 'Word of the Day'
-      : 'WordDeck')
+      : 'Vocab Deck')
 
   return (
     <div

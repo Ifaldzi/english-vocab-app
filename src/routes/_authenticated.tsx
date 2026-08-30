@@ -73,18 +73,18 @@ function AuthenticatedLayout() {
           <img
             className="logo-img logo-dark"
             src="/logo-dark.png"
-            alt="WordDeck logo"
+            alt="Vocab Deck logo"
             width={36}
             height={36}
           />
           <img
             className="logo-img logo-light"
             src="/logo-light.png"
-            alt="WordDeck logo"
+            alt="Vocab Deck logo"
             width={36}
             height={36}
           />
-          <span>WordDeck</span>
+          <span>Vocab Deck</span>
         </div>
         <nav className="side-nav">
           <Link to="/" activeProps={{ className: 'active' }}>
@@ -143,18 +143,18 @@ function AuthenticatedLayout() {
               <img
                 className="logo-dark"
                 src="/logo-dark.png"
-                alt="WordDeck logo"
+                alt="Vocab Deck logo"
                 width={22}
                 height={22}
               />
               <img
                 className="logo-light"
                 src="/logo-light.png"
-                alt="WordDeck logo"
+                alt="Vocab Deck logo"
                 width={22}
                 height={22}
               />
-              WordDeck
+              Vocab Deck
             </span>
             <span className="top-title">{topTitle}</span>
             <span className="spacer" />

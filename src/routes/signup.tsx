@@ -70,14 +70,14 @@ function SignupPage() {
           <img
             className="logo-dark"
             src="/logo-dark.png"
-            alt="WordDeck logo"
+            alt="Vocab Deck logo"
             width={46}
             height={46}
           />
           <img
             className="logo-light"
             src="/logo-light.png"
-            alt="WordDeck logo"
+            alt="Vocab Deck logo"
             width={46}
             height={46}
           />

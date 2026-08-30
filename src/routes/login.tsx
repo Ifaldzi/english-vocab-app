@@ -70,19 +70,19 @@ function LoginPage() {
           <img
             className="logo-dark"
             src="/logo-dark.png"
-            alt="WordDeck logo"
+            alt="Vocab Deck logo"
             width={46}
             height={46}
           />
           <img
             className="logo-light"
             src="/logo-light.png"
-            alt="WordDeck logo"
+            alt="Vocab Deck logo"
             width={46}
             height={46}
           />
         </div>
-        <h1>WordDeck</h1>
+        <h1>Vocab Deck</h1>
         <p className="sub">
           Gather &amp; memorize English vocabulary, one word a day.
         </p>

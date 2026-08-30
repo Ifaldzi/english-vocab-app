@@ -1,4 +1,4 @@
-# WordDeck — English Vocabulary Memorizer
+# Vocab Deck — English Vocabulary Memorizer
 
 A full-stack web app that helps you gather and memorize English vocabulary using daily word cards, sentence validation, and gamification.
 
