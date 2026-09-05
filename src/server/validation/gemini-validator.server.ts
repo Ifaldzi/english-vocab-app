@@ -67,7 +67,7 @@ export function createGeminiValidatorFromApi(
     apiKey,
     httpOptions: {
       timeout: REQUEST_TIMEOUT_MS,
-      retryOptions: { attempts: 1 },
+      retryOptions: { attempts: 3, httpStatusCodes: [503] },
     },
   })
 
