@@ -32,7 +32,12 @@ const config = defineConfig({
   // secret (`GA4_API_SECRET`) must never reach the client bundle.
   envPrefix: ['VITE_', 'GA_'],
   plugins: [
-    devtools(),
+    devtools({
+      // The AbortError from server functions cancelled on route change is
+      // emitted via console.log; excluding it keeps the terminal clean while
+      // warn/error/info/debug still pipe.
+      consolePiping: { levels: ['warn', 'error', 'info', 'debug'] },
+    }),
     nitro({
       rollupConfig: { external: [/^@sentry\//] },
       routeRules: {
