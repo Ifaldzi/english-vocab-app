@@ -933,6 +933,11 @@ h2.section {
   padding-top: 20px;
   margin-top: 20px;
 }
+.modal .actions-row {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
 
 /* Prove section */
 .prove {
@@ -1750,13 +1755,17 @@ html[data-theme='light'] .library-back {
 }
 html[data-theme='light'] .wordcard .front .word,
 html[data-theme='light'] .stage .front .word,
-html[data-theme='light'] .banner.failure,
 html[data-theme='light'] .mcq .opt.correct,
 html[data-theme='light'] .mcq .opt.wrong,
 html[data-theme='light'] .prove .prove-sub b,
 html[data-theme='light'] .vocab-card,
 html[data-theme='light'] .page-button {
   color: #2b2110;
+}
+html[data-theme='light'] .banner.failure {
+  background: #fde8e8;
+  color: #b91c1c;
+  border-color: #f5c2c2;
 }
 html[data-theme='light'] .prove .prove-sub {
   color: #594722;
