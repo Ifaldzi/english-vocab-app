@@ -212,6 +212,7 @@ function TodayPage() {
         study={study}
         onClose={() => setStudy((s) => ({ ...s, open: false }))}
         onBackToToday={() => setStudy((s) => ({ ...s, open: false }))}
+        onAnotherWord={openExtra}
         onSaved={() => {
           queryClient.invalidateQueries({ queryKey: ['daily-word'] })
           queryClient.invalidateQueries({ queryKey: ['progress'] })

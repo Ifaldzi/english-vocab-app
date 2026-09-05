@@ -16,6 +16,7 @@ export interface StudyModalProps {
   }
   onClose: () => void
   onBackToToday?: () => void
+  onAnotherWord?: () => void
   onSaved: () => void
   title?: string
   primaryActionLabel?: string
@@ -25,6 +26,7 @@ export function StudyModal({
   study,
   onClose,
   onBackToToday,
+  onAnotherWord,
   onSaved,
   title,
   primaryActionLabel,
@@ -246,7 +248,10 @@ export function StudyModal({
                     </div>
                   </div>
                   <div className="actions-row mt">
-                    <button className="btn btn-primary" onClick={onClose}>
+                    <button
+                      className="btn btn-primary"
+                      onClick={onAnotherWord ?? onClose}
+                    >
                       {primaryActionLabel ?? '+ Another word'}
                     </button>
                     {onBackToToday && (
