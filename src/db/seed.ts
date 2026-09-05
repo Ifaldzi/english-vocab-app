@@ -1,4 +1,4 @@
-import { db } from './index'
+import { and, eq, db } from './index'
 import { badges, words } from './schema'
 
 /** Badge catalog — canonical per PRD FR-8.4. */
@@ -157,21 +157,33 @@ export function seedBadges() {
   }
 }
 
-/** Idempotent word seed. Throws if any row is missing a required field. */
+/** Idempotent word seed. Updates matching (word, kind) rows in place and
+ *  inserts missing rows, so it can be re-run to sync definition fixes. */
 export function seedWords(rows: SeedWord[]) {
-  const existing = db.select({ id: words.id }).from(words).limit(1).get()
-  if (existing) {
-    return 0
-  }
+  let inserted = 0
+  let updated = 0
 
-  const CHUNK = 500
-  for (let i = 0; i < rows.length; i += CHUNK) {
-    db.insert(words)
-      .values(rows.slice(i, i + CHUNK))
+  for (const row of rows) {
+    const existing = db
+      .update(words)
+      .set({
+        level: row.level,
+        definition: row.definition,
+        indonesia: row.indonesia,
+        sentenceExample: row.sentenceExample,
+      })
+      .where(and(eq(words.word, row.word), eq(words.kind, row.kind)))
       .run()
+
+    if (existing.changes > 0) {
+      updated++
+    } else {
+      db.insert(words).values(row).run()
+      inserted++
+    }
   }
 
-  return rows.length
+  return { inserted, updated }
 }
 
 export { badges, words }

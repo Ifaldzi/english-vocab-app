@@ -42,12 +42,8 @@ function main() {
   seedBadges()
   console.log(`Badges seeded (${15} catalog entries)`)
 
-  const inserted = seedWords(data.map(toSeedWord))
-  console.log(
-    inserted === 0
-      ? 'Words already seeded — skipped'
-      : `Words seeded: ${inserted} rows`,
-  )
+  const { inserted, updated } = seedWords(data.map(toSeedWord))
+  console.log(`Words synced: ${updated} updated, ${inserted} inserted`)
 
   sqlite.close()
   console.log('Done')
