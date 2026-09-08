@@ -18,7 +18,6 @@ import {
   createSession,
   getCurrentSession,
   setSessionCookie,
-  revokeAllSessions,
   revokeSession,
   readSessionToken,
   clearSessionCookie,
@@ -81,7 +80,6 @@ export const signupFn = createServerFn({ method: 'POST' })
       .returning({ id: users.id })
       .get()
 
-    await revokeAllSessions(result.id)
     const token = await createSession(result.id)
     setSessionCookie(token)
 
@@ -125,7 +123,6 @@ export const loginFn = createServerFn({ method: 'POST' })
       }
     }
 
-    await revokeAllSessions(user.id)
     const token = await createSession(user.id)
     setSessionCookie(token)
 
