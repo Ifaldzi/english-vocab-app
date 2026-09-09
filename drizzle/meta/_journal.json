@@ -8,6 +8,13 @@
       "when": 1786778977316,
       "tag": "0000_lush_rattler",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1788942014168,
+      "tag": "0001_equal_slipstream",
+      "breakpoints": true
     }
   ]
 }

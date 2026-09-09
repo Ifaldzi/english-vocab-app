@@ -8,10 +8,12 @@ import {
 } from '@tanstack/react-router'
 import { useQuery } from '@tanstack/react-query'
 import { Home, RotateCcw, BarChart3, LogOut, Flame } from 'lucide-react'
+import { useEffect } from 'react'
 
 import { getProgressFn } from '../server/progress/progress.functions'
 import { logoutFn } from '../server/auth/auth.functions'
 import { ThemeToggle } from '../components/ThemeToggle'
+import { enableNotifications } from '../lib/notifications'
 
 export const Route = createFileRoute('/_authenticated')({
   beforeLoad: ({ context, location }) => {
@@ -37,6 +39,12 @@ function AuthenticatedLayout() {
     queryKey: ['progress'],
     queryFn: getProgressFn,
   })
+
+  // Opt-in to daily reminder push notifications on first load (browser prompt
+  // appears once; subsequent visits silently keep the subscription).
+  useEffect(() => {
+    enableNotifications()
+  }, [])
 
   const handleLogout = async () => {
     await logoutFn()

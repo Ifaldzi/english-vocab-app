@@ -22,6 +22,7 @@ export default [
       '.tanstack/**',
       'seroval-test.ts',
       'docs/mockup/theme-toggle.js',
+      'public/sw.js',
     ],
   },
 ]

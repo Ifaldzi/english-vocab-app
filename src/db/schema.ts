@@ -126,6 +126,46 @@ export const badges = sqliteTable('badges', {
   criteria: text('criteria').notNull(),
 })
 
+// ---------- push_subscriptions (Web Push, one row per browser/device) ----------
+
+export const pushSubscriptions = sqliteTable(
+  'push_subscriptions',
+  {
+    id: integer('id').primaryKey({ autoIncrement: true }),
+    userId: integer('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    endpoint: text('endpoint').notNull(),
+    p256dh: text('p256dh').notNull(),
+    auth: text('auth').notNull(),
+    createdAt: integer('created_at').notNull(),
+  },
+  (table) => [
+    uniqueIndex('push_subscriptions_endpoint_unique').on(table.endpoint),
+    index('push_subscriptions_user_id_idx').on(table.userId),
+  ],
+)
+
+// ---------- push_deliveries (one reminder per user per day) ----------
+
+export const pushDeliveries = sqliteTable(
+  'push_deliveries',
+  {
+    id: integer('id').primaryKey({ autoIncrement: true }),
+    userId: integer('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    date: text('date').notNull(), // YYYY-MM-DD (app timezone)
+    sentAt: integer('sent_at').notNull(),
+  },
+  (table) => [
+    uniqueIndex('push_deliveries_user_date_unique').on(
+      table.userId,
+      table.date,
+    ),
+  ],
+)
+
 // ---------- user_badges ----------
 
 export const userBadges = sqliteTable(
@@ -155,6 +195,8 @@ export const usersRelations = relations(users, ({ many }) => ({
   userWords: many(userWords),
   dailyWords: many(dailyWords),
   userStats: many(userStats),
+  pushSubscriptions: many(pushSubscriptions),
+  pushDeliveries: many(pushDeliveries),
 }))
 
 export const sessionsRelations = relations(sessions, ({ one }) => ({
@@ -185,5 +227,22 @@ export const userBadgesRelations = relations(userBadges, ({ one }) => ({
   badge: one(badges, {
     fields: [userBadges.badgeCode],
     references: [badges.code],
+  }),
+}))
+
+export const pushSubscriptionsRelations = relations(
+  pushSubscriptions,
+  ({ one }) => ({
+    user: one(users, {
+      fields: [pushSubscriptions.userId],
+      references: [users.id],
+    }),
+  }),
+)
+
+export const pushDeliveriesRelations = relations(pushDeliveries, ({ one }) => ({
+  user: one(users, {
+    fields: [pushDeliveries.userId],
+    references: [users.id],
   }),
 }))

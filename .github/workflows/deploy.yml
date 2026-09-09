@@ -224,6 +224,13 @@ jobs:
               export SENTENCE_VALIDATOR=ai
               export GEMINI_MODEL="${{ vars.GEMINI_MODEL || 'gemini-3.5-flash-lite' }}"
             fi
+            if [ -n "${{ secrets.VAPID_PRIVATE_KEY }}" ]; then
+              export VAPID_PUBLIC_KEY="${{ secrets.VAPID_PUBLIC_KEY }}"
+              export VAPID_PRIVATE_KEY="${{ secrets.VAPID_PRIVATE_KEY }}"
+              export VAPID_SUBJECT="${{ secrets.VAPID_SUBJECT }}"
+              export REMINDER_HOUR="${{ vars.REMINDER_HOUR || 18 }}"
+              export REMINDER_ENABLED=true
+            fi
             if pm2 describe "${{ vars.VPS_APP_NAME }}" >/dev/null 2>&1; then
               pm2 reload "${{ vars.VPS_APP_NAME }}" --update-env || pm2 restart "${{ vars.VPS_APP_NAME }}" --update-env
             else

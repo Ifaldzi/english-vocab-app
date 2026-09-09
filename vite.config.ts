@@ -43,6 +43,7 @@ const config = defineConfig({
       routeRules: {
         '/**': { headers: securityHeaders },
       },
+      plugins: ['./src/server/notifications/scheduler.ts'],
     }),
     tailwindcss(),
     tanstackStart(),
