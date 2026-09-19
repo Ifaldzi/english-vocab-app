@@ -111,7 +111,7 @@ function ProgressPage() {
           <Link
             className="btn btn-ghost library-link"
             to="/vocabularies"
-            search={{ q: '', level: 'all', page: 1 }}
+            search={{ q: '', level: 'all', kind: 'all', page: 1 }}
           >
             View all vocabularies
           </Link>
