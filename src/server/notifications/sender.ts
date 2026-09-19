@@ -15,14 +15,6 @@ export function getVapidPublicKey(): string | null {
   return configured ? (process.env.VAPID_PUBLIC_KEY as string) : null
 }
 
-function isConfigured(): boolean {
-  return Boolean(
-    process.env.VAPID_PUBLIC_KEY &&
-    process.env.VAPID_PRIVATE_KEY &&
-    process.env.VAPID_SUBJECT,
-  )
-}
-
 export interface SendPushInput {
   sub: PushSubscriptionRow
   title: string
@@ -39,13 +31,10 @@ export type SendPushResult = 'sent' | 'gone' | 'throttled' | 'failed'
  * and the caller should drop it. Returns a coarse status for the caller.
  */
 export async function sendPush(input: SendPushInput): Promise<SendPushResult> {
-  if (!isConfigured()) return 'failed'
+  const { VAPID_SUBJECT, VAPID_PUBLIC_KEY, VAPID_PRIVATE_KEY } = process.env
+  if (!VAPID_SUBJECT || !VAPID_PUBLIC_KEY || !VAPID_PRIVATE_KEY) return 'failed'
 
-  webpush.setVapidDetails(
-    process.env.VAPID_SUBJECT as string,
-    process.env.VAPID_PUBLIC_KEY as string,
-    process.env.VAPID_PRIVATE_KEY as string,
-  )
+  webpush.setVapidDetails(VAPID_SUBJECT, VAPID_PUBLIC_KEY, VAPID_PRIVATE_KEY)
 
   const payload = JSON.stringify({
     title: input.title,
